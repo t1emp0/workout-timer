@@ -1,21 +1,21 @@
 const ex0 = {
-  duration: 4,
-  exercice: "Slav squad",
+  duration: 15,
+  exercice: "Squats",
 };
 
 const ex1 = {
-  duration: 4,
-  exercice: "High higher",
+  duration: 10,
+  exercice: "High Plank",
 };
 
 const ex2 = {
-  duration: 4,
+  duration: 10,
   exercice: "Burpees",
 };
 
 const ex3 = {
-  duration: 4,
-  exercice: "Plank",
+  duration: 15,
+  exercice: "Low Plank",
 };
 
 const events = [ex0, ex1, ex2, ex3];
