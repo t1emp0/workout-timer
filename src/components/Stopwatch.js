@@ -19,6 +19,7 @@ class Stopwatch extends Component {
       timerOn: true,
       timerTime: this.state.timerTime,
       timerStart: Date.now() - this.state.timerTime,
+      timerFinished: false,
     });
     this.timer = setInterval(() => {
       this.setState({
@@ -37,6 +38,7 @@ class Stopwatch extends Component {
     this.setState({
       timerStart: 0,
       timerTime: 0,
+      timerFinished: false,
     });
     this.startEvents();
   };
@@ -100,6 +102,7 @@ class Stopwatch extends Component {
     if (this.state.timerOn === true) {
       if (exerciceSeconds >= this.currentExercice.duration) {
         if (this.events.length === 0) {
+          this.setState({ timerFinished: true });
           this.stopTimer();
         } else {
           this.lastStart = totalSeconds;
@@ -112,24 +115,41 @@ class Stopwatch extends Component {
 
     return (
       <div className="Stopwatch">
-        <div>Exercices left: {this.events.length + 1}</div>
+        {this.state.timerTime === 0 && (
+          <div>
+            <h3>Ready to begin workout. Press start!</h3>
+          </div>
+        )}
 
-        <div>Current exercice:</div>
-        <h2 style={{ margin: 0, paddingBottom: "30px" }}>
-          {this.currentExercice.exercice}
-        </h2>
+        {!this.state.timerFinished && (
+          <div>
+            <div>Exercices left: {this.events.length + 1}</div>
 
-        <div style={{ justifyContent: "center", display: "flex" }}>
-          <h4 style={{ margin: 0 }}>Exercice progress: </h4>
-          &nbsp;&nbsp;
-          {(exerciceProgress * 100).toFixed(0)} %
-        </div>
+            <div>Current exercice:</div>
+            <h2 style={{ margin: 0, paddingBottom: "30px" }}>
+              {this.currentExercice.exercice}
+            </h2>
 
-        <div style={{ justifyContent: "center", display: "flex" }}>
-          <h4 style={{ margin: 0 }}>Exercice time: </h4>
-          &nbsp;&nbsp;
-          {this.timeFormatter(exerciceLeft * 1000)}
-        </div>
+            <div style={{ justifyContent: "center", display: "flex" }}>
+              <h4 style={{ margin: 0 }}>Exercice progress: </h4>
+              &nbsp;&nbsp;
+              {(exerciceProgress * 100).toFixed(0)} %
+            </div>
+
+            <div style={{ justifyContent: "center", display: "flex" }}>
+              <h4 style={{ margin: 0 }}>Exercice time: </h4>
+              &nbsp;&nbsp;
+              {this.timeFormatter(exerciceLeft * 1000)}
+            </div>
+          </div>
+        )}
+
+        {this.state.timerFinished && this.state.timerTime !== 0 && (
+          <div>
+            <h3>Workout done! Congratulations!</h3>
+          </div>
+        )}
+
         <div
           className="Stopwatch-display"
           style={{ justifyContent: "center", display: "flex" }}
