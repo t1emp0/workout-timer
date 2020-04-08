@@ -1,13 +1,12 @@
 import "./App.css";
 import React from "react";
 
-import Stopwatch from "./components/Stopwatch";
-import events from "./events";
+import FormHandler from "./components/FormHandler";
 
 function App() {
   return (
     <div className="App">
-      <Stopwatch events={events} />
+      <FormHandler />
     </div>
   );
 }

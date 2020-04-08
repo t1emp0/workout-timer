@@ -44,13 +44,13 @@ class Stopwatch extends Component {
   startEvents() {
     // Initialize the loop:
     this.events = [...this.props.events];
-    console.log("Events:");
-    console.log(this.events);
-    console.log(this.events.length);
+    console.log("Events:", this.events);
 
-    // Assign the first two exercices after checking they exist
+    // Assign the first exercice after checking it exists
     this.currentExercice = this.events.shift() || this.events.length > 0;
 
+    // this.state.timerTime = 0;
+    this.setState({ timerTime: 0 });
     this.lastStart = 0;
   }
 
@@ -61,8 +61,8 @@ class Stopwatch extends Component {
   }
 
   /**
-   * Formats the given time to a string (HH) : MM : SS
-   * @param {Time to be formatted in milliseconds} timeMilis 
+   * Formats the given time to a string (HH :) MM : SS
+   * @param {Time to be formatted in milliseconds} timeMilis
    */
   timeFormatter(timeMilis) {
     //let deciseconds = ("0" + (Math.floor(timeMilis / 100) % 10)).slice(-1);
@@ -71,15 +71,22 @@ class Stopwatch extends Component {
     let hours = ("0" + Math.floor(timeMilis / 3600000)).slice(-2);
 
     let output = "";
-    if (hours !== "00") {
-      output = hours + " : " + minutes + " : " + seconds;
-    } else {
+    if (hours === "00") {
       output = minutes + " : " + seconds;
+    } else {
+      output = hours + " : " + minutes + " : " + seconds;
     }
     return output;
   }
 
   render() {
+    if (this.props.updated) {
+      console.log("Update signal recieved");
+      this.props.setExercicesUpdated(false);
+      this.startEvents();
+      console.log("Exercices updated");
+    }
+
     const { timerTime } = this.state;
 
     let totalSeconds = Math.floor(timerTime / 1000);
@@ -87,7 +94,8 @@ class Stopwatch extends Component {
 
     let exerciceSeconds = Math.floor(exerciceMilis / 1000);
     let exerciceLeft = this.currentExercice.duration - exerciceSeconds;
-    let exerciceProgress = 0;
+    let exerciceProgress =
+      exerciceMilis / (this.currentExercice.duration * 1000);
 
     if (this.state.timerOn === true) {
       if (exerciceSeconds >= this.currentExercice.duration) {
@@ -100,19 +108,20 @@ class Stopwatch extends Component {
           console.log("Exercice changed to: ", this.currentExercice.exercice);
         }
       }
-
-      exerciceProgress = exerciceMilis / (this.currentExercice.duration * 1000);
     }
 
     return (
       <div className="Stopwatch">
+        <div>Exercices left: {this.events.length + 1}</div>
+
         <div>Current exercice:</div>
         <h2 style={{ margin: 0, paddingBottom: "30px" }}>
           {this.currentExercice.exercice}
         </h2>
+
         <div style={{ justifyContent: "center", display: "flex" }}>
           <h4 style={{ margin: 0 }}>Exercice progress: </h4>
-          &nbsp;
+          &nbsp;&nbsp;
           {(exerciceProgress * 100).toFixed(0)} %
         </div>
 
