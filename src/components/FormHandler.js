@@ -40,14 +40,6 @@ class FormHandler extends Component {
   render() {
     return (
       <div>
-        {/*<textarea
-          type="text"
-          name="exercicesInput"
-          value={this.state.textBox}
-          onChange={this.handleChange}
-        >
-          {" "}
-        </textarea> */}
         <form onSubmit={this.handleSubmit}>
           <textarea
             type="text"
