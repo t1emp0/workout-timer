@@ -35,6 +35,7 @@ class FormHandler extends Component {
     });
     console.log(this.state.exercices);
     event.preventDefault();
+    this.props.notifyChange();
   };
 
   render() {
@@ -57,8 +58,9 @@ class FormHandler extends Component {
             <Stopwatch
               number={this.state.number}
               events={this.state.exercices}
-              updated={this.state.exercicesUpdated}
+              areExercicesUpdated={this.state.areExercicesUpdated}
               setExercicesUpdated={this.setExercicesUpdated}
+              notifyChange={this.props.notifyChange}
             />
           </div>
         )}

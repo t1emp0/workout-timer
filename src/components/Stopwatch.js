@@ -59,6 +59,7 @@ class Stopwatch extends Component {
   changeExercice() {
     var nextExercice = this.events.shift();
     console.log(nextExercice);
+    this.props.notifyChange();
     return nextExercice;
   }
 
@@ -82,7 +83,7 @@ class Stopwatch extends Component {
   }
 
   render() {
-    if (this.props.updated) {
+    if (this.props.areExercicesUpdated) {
       console.log("Update signal recieved");
       this.props.setExercicesUpdated(false);
       this.startEvents();
