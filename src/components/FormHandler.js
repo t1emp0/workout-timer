@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import Stopwatch from "./Stopwatch";
-import textDealer from "./InputHandler";
+import inputToExerciceArray from "./InputHandler";
 
 class FormHandler extends Component {
   constructor(props) {
@@ -30,7 +30,7 @@ class FormHandler extends Component {
   handleSubmit = (event) => {
     this.setState({
       textInput: this.state.textBox,
-      exercices: textDealer(this.state.textBox),
+      exercices: inputToExerciceArray(this.state.textBox),
       exercicesUpdated: true,
     });
     console.log(this.state.exercices);
