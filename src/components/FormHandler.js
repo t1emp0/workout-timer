@@ -13,7 +13,7 @@ class FormHandler extends Component {
       exercices: [],
     };
 
-    this.state.textBox = '5" squats, 5" plank, 5" flex';
+    this.state.textBox = '5" squats, 2* (2*(5"plank)), 5" flex';
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,7 +35,6 @@ class FormHandler extends Component {
     });
     console.log(this.state.exercices);
     event.preventDefault();
-    this.props.notifyChange();
   };
 
   render() {
