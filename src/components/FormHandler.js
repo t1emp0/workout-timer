@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import Stopwatch from "./Stopwatch";
-import inputToExerciceArray from "./InputHandler";
+import inputToExerciceArray from "./InputParser";
 
 class FormHandler extends Component {
   constructor(props) {
