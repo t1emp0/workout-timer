@@ -4,7 +4,7 @@ import React, { Component } from "react";
 class Stopwatch extends Component {
   constructor(props) {
     super(props);
-    this.startEvents();
+    console.log("Stopwatch constructor called");
   }
 
   state = {
@@ -40,13 +40,14 @@ class Stopwatch extends Component {
       timerTime: 0,
       timerFinished: false,
     });
+    //console.log(this.props.exercicesUpdated);
     this.startEvents();
   };
 
   startEvents() {
     // Initialize the loop:
     this.events = [...this.props.events];
-    console.log("Events:", this.events);
+    //console.log("Events:", this.events);
 
     // Assign the first exercice after checking it exists
     this.currentExercice = this.events.shift() || this.events.length > 0;
@@ -82,12 +83,17 @@ class Stopwatch extends Component {
     return output;
   }
 
+  handleUpdateSignal() {
+    // console.log("Update signal recieved");
+    this.props.setExercicesUpdated(false);
+    this.stopTimer();
+    this.resetTimer();
+    console.log("Exercices updated");
+  }
+
   render() {
-    if (this.props.areExercicesUpdated) {
-      console.log("Update signal recieved");
-      this.props.setExercicesUpdated(false);
-      this.startEvents();
-      console.log("Exercices updated");
+    if (this.props.exercicesUpdated) {
+      this.handleUpdateSignal();
     }
 
     const { timerTime } = this.state;
@@ -109,7 +115,7 @@ class Stopwatch extends Component {
           this.lastStart = totalSeconds;
           this.currentExercice = this.changeExercice();
 
-          console.log("Exercice changed to: ", this.currentExercice.exercice);
+          console.log("Exercice changed to:", this.currentExercice.exercice);
         }
       }
     }
