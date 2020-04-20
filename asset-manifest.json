@@ -1,23 +1,28 @@
 {
   "files": {
     "main.css": "/workout-timer/static/css/main.523f09c5.chunk.css",
-    "main.js": "/workout-timer/static/js/main.b5e29e78.chunk.js",
-    "main.js.map": "/workout-timer/static/js/main.b5e29e78.chunk.js.map",
+    "main.js": "/workout-timer/static/js/main.be84fd98.chunk.js",
+    "main.js.map": "/workout-timer/static/js/main.be84fd98.chunk.js.map",
     "runtime-main.js": "/workout-timer/static/js/runtime-main.8afb4986.js",
     "runtime-main.js.map": "/workout-timer/static/js/runtime-main.8afb4986.js.map",
-    "static/js/2.b4bb5cc8.chunk.js": "/workout-timer/static/js/2.b4bb5cc8.chunk.js",
-    "static/js/2.b4bb5cc8.chunk.js.map": "/workout-timer/static/js/2.b4bb5cc8.chunk.js.map",
+    "static/css/2.b7564337.chunk.css": "/workout-timer/static/css/2.b7564337.chunk.css",
+    "static/js/2.2aa406b8.chunk.js": "/workout-timer/static/js/2.2aa406b8.chunk.js",
+    "static/js/2.2aa406b8.chunk.js.map": "/workout-timer/static/js/2.2aa406b8.chunk.js.map",
     "index.html": "/workout-timer/index.html",
-    "precache-manifest.38523f9d1e08f5c90bd3a29566e7143b.js": "/workout-timer/precache-manifest.38523f9d1e08f5c90bd3a29566e7143b.js",
+    "precache-manifest.5f2f2fa942807bc34e57efbe888cc9ab.js": "/workout-timer/precache-manifest.5f2f2fa942807bc34e57efbe888cc9ab.js",
     "service-worker.js": "/workout-timer/service-worker.js",
+    "static/css/2.b7564337.chunk.css.map": "/workout-timer/static/css/2.b7564337.chunk.css.map",
     "static/css/main.523f09c5.chunk.css.map": "/workout-timer/static/css/main.523f09c5.chunk.css.map",
-    "static/js/2.b4bb5cc8.chunk.js.LICENSE.txt": "/workout-timer/static/js/2.b4bb5cc8.chunk.js.LICENSE.txt",
-    "static/media/bells.mp3": "/workout-timer/static/media/bells.b62cc0d9.mp3"
+    "static/js/2.2aa406b8.chunk.js.LICENSE.txt": "/workout-timer/static/js/2.2aa406b8.chunk.js.LICENSE.txt",
+    "static/media/inter.css": "/workout-timer/static/media/Inter.var.7e1eda3a.woff2",
+    "static/media/bells.mp3": "/workout-timer/static/media/bells.b62cc0d9.mp3",
+    "static/media/index.css": "/workout-timer/static/media/montserrat-latin-900italic.a8ec4957.woff"
   },
   "entrypoints": [
     "static/js/runtime-main.8afb4986.js",
-    "static/js/2.b4bb5cc8.chunk.js",
+    "static/css/2.b7564337.chunk.css",
+    "static/js/2.2aa406b8.chunk.js",
     "static/css/main.523f09c5.chunk.css",
-    "static/js/main.b5e29e78.chunk.js"
+    "static/js/main.be84fd98.chunk.js"
   ]
 }
