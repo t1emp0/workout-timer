@@ -15,7 +15,7 @@ class FormHandler extends Component {
       showEditing: true,
     };
 
-    this.state.textBox = '5" squats, 2* (2*(5"plank, 5"burpees)), 5" flex';
+    this.state.textBox = '5" squats, 2x (2x(5"plank, 5"burpees)), 5" flex';
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);

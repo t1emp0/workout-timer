@@ -6,7 +6,7 @@
  *      (Convert all time to s)
  * [X] 3- Deal with exercice blocks
  *      (By simply looping over n times?)
- * [ ] 4- Change "x"s for "*" where needed
+ * [X] 4- Change "x"s for "*" where needed
  *      (If it is in the middle of an exercice, better not)
  * [ ] 5- Deal with comments for each exercice
  *      (Just adding them to the screen)
@@ -24,20 +24,45 @@ function makeTextReplacements(input) {
   let second = first.replace(/[“”]/g, '"');
   let third = second.replace(/[[{]/g, "(");
   let fourth = third.replace(/[\]}]/g, ")");
-  return fourth;
+  let fifth = replaceXs(fourth);
+  return fifth;
 }
 
+function replaceXs(input) {
+  for (var i = 0; i < input.length; i++) {
+    let c = input[i];
+    let replace = true;
+    if (c === "x") {
+      if (i - 1 >= 0) {
+        const prev = input[i - 1];
+        replace = !isLetter(prev);
+      }
+      if (i + 1 < input.length) {
+        const post = input[i + 1];
+        replace = replace && !isLetter(post);
+      }
+      if (replace) {
+        input = input.slice(0,i) + "*" + input.slice(i+1);
+      }
+    }
+  }
+  return input;
+}
+
+function isLetter(char) {
+  return char.match(/[a-z]/i) !== null;
+}
 
 function computeRepetition(input) {
   let multIndex = input.indexOf("*");
   while (input.indexOf("*") !== -1) {
-    let first, times, block, last
+    let first, times, block, last;
     [first, times] = getNumReps(input, multIndex);
     [last, block] = getBlock(input, multIndex);
   
     let repeated = repeatBlock(block, times);
-    
-    input = input.slice(0,first) + repeated + input.slice(last+1);
+
+    input = input.slice(0, first) + repeated + input.slice(last + 1);
     multIndex = input.indexOf("*");
   }
   return input;
@@ -73,8 +98,8 @@ function getBlock(input, m) {
 
 /**
  * Repeat the block and add ", " between reps
- * @param {string} block 
- * @param {int} numTimes 
+ * @param {string} block
+ * @param {int} numTimes
  */
 function repeatBlock(block, numTimes) {
   let repeatedBlock = "";
@@ -84,8 +109,6 @@ function repeatBlock(block, numTimes) {
   }
   return repeatedBlock;
 }
-
-
 
 function getNumReps(input, multIndex) {
   let repetitions = [];
