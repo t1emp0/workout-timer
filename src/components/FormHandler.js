@@ -15,11 +15,11 @@ class FormHandler extends Component {
       showEditing: true,
     };
 
-    this.state.textBox = '5" squats, 2x (2x(5"plank, 5"burpees)), 5" flex';
+    this.state.textBox = '5" squats + 2x [2x(5"plank + 5"burpees)] + 5" flex';
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.editExercices = this.editExercices.bind(this);
+    this.handleEditExercices = this.handleEditExercices.bind(this);
     this.setExercicesUpdated = this.setExercicesUpdated.bind(this);
   }
 
@@ -27,7 +27,7 @@ class FormHandler extends Component {
     this.setState({ exercicesUpdated: state });
   };
 
-  editExercices = () => {
+  handleEditExercices = () => {
     this.setState({ showEditing: true});
   }
   
@@ -67,7 +67,7 @@ class FormHandler extends Component {
         )}
 
         {!this.state.showEditing && (
-          <button onClick={this.editExercices}>
+          <button onClick={this.handleEditExercices}>
             Edit exercices
           </button>
         )}

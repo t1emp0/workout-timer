@@ -15,9 +15,37 @@
  */
 
 /**
+ * @desc Transforms the long string into an array of exercices
+ * @param {string} input A correctly formatted exercice session (see documentation)
+ * @return The array containing a dict for each exercice
+ */
+export function inputToExerciceArray(input) {
+  let replaced = makeTextReplacements(input);
+  console.log(replaced);
+  let full = computeRepetition(replaced);
+  let splitted = full.split(",");
+
+  let exercices = [];
+
+  splitted.forEach((ex) => {
+    let exInSeconds = convertToSeconds(ex);
+    let [exDuration, exName] = exInSeconds.split('"');
+
+    let exercice = {
+      duration: exDuration.trim(),
+      name: exName.trim(),
+    };
+
+    exercices.push(exercice);
+  });
+
+  return exercices;
+}
+
+/**
  * @desc Replaces "similar" characters to help user input
  * @param {string} input
- * @return Correctly replaced string
+ * @return {string} Correctly replaced string
  */
 function makeTextReplacements(input) {
   let first = input.replace(/\+/g, ",");
@@ -42,7 +70,7 @@ function replaceXs(input) {
         replace = replace && !isLetter(post);
       }
       if (replace) {
-        input = input.slice(0,i) + "*" + input.slice(i+1);
+        input = input.slice(0, i) + "*" + input.slice(i + 1);
       }
     }
   }
@@ -53,19 +81,46 @@ function isLetter(char) {
   return char.match(/[a-z]/i) !== null;
 }
 
+/**
+ * @desc Expands the exercice blocks given in the input.
+ * @param {string} input
+ * @returns {string} with the blocks expanded
+ */
 function computeRepetition(input) {
   let multIndex = input.indexOf("*");
   while (input.indexOf("*") !== -1) {
     let first, times, block, last;
     [first, times] = getNumReps(input, multIndex);
     [last, block] = getBlock(input, multIndex);
-  
+
     let repeated = repeatBlock(block, times);
 
     input = input.slice(0, first) + repeated + input.slice(last + 1);
     multIndex = input.indexOf("*");
   }
   return input;
+}
+
+function getNumReps(input, multIndex) {
+  let repetitions = [];
+  let currentIndex = multIndex;
+  let loop = true;
+
+  while (loop && currentIndex >= 0) {
+    currentIndex--;
+    repetitions.unshift(input[currentIndex]);
+    loop = isNumericChar(input[currentIndex - 1]) && currentIndex > 0;
+  }
+  if (repetitions.length === 0) {
+    // EXCEPTION
+    return "";
+  }
+  let numReps = repetitions.join("").trim();
+  return [currentIndex, numReps];
+}
+
+function isNumericChar(char) {
+  return /^\d$/.test(char);
 }
 
 /**
@@ -110,29 +165,6 @@ function repeatBlock(block, numTimes) {
   return repeatedBlock;
 }
 
-function getNumReps(input, multIndex) {
-  let repetitions = [];
-  let currentIndex = multIndex;
-  let loop = true;
-
-  while (loop && currentIndex >= 0) {
-    currentIndex--;
-    // console.log(input[currentIndex]);
-    repetitions.unshift(input[currentIndex]);
-    loop = isNumericChar(input[currentIndex - 1]) && currentIndex > 0;
-  }
-  if (repetitions.length === 0) {
-    // EXCEPTION
-    return "";
-  }
-  let numReps = repetitions.join("").trim();
-  return [currentIndex, numReps];
-}
-
-function isNumericChar(char) {
-  return /^\d$/.test(char);
-}
-
 /**
  * @desc Converts excercice duration to seconds
  * @param {string} exercice in form: MM'SS" exerciceName
@@ -152,43 +184,6 @@ function convertToSeconds(exercice) {
     let totalSeconds = 60 * mins + parseInt(secs);
     return totalSeconds.toString() + '"' + exercice.slice(sIndex + 1);
   }
-}
-
-function getSeconds(exercice) {
-  let divided = exercice.split('"');
-  return divided[0].trim();
-}
-
-function getName(exercice) {
-  let divided = exercice.split('"');
-  return divided[1].trim();
-}
-
-/**
- * @desc Transforms the long string into an array of exercices
- * @param {string} input A correctly formatted exercice session (see documentation)
- * @return The array containing a dict for each exercice
- */
-export function inputToExerciceArray(input) {
-  let replaced = makeTextReplacements(input);
-  console.log(replaced);
-  let full = computeRepetition(replaced);
-  let splitted = full.split(",");
-
-  let exercices = [];
-
-  splitted.forEach((ex) => {
-    let exInSeconds = convertToSeconds(ex);
-
-    let exercice = {
-      duration: getSeconds(exInSeconds),
-      exercice: getName(exInSeconds),
-    };
-
-    exercices.push(exercice);
-  });
-
-  return exercices;
 }
 
 export default inputToExerciceArray;
