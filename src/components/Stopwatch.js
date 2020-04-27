@@ -1,5 +1,6 @@
+import "../App.css";
 import React, { Component } from "react";
-//import "../App.css";
+import { Typography, CircularProgress } from "@material-ui/core";
 
 class Stopwatch extends Component {
   constructor(props) {
@@ -111,6 +112,23 @@ class Stopwatch extends Component {
     console.log("Workout updated");
   }
 
+  getButtons() {
+    if (this.state.timerOn === false && this.state.timerTime === 0) {
+      return <button onClick={this.startTimer}>Start</button>;
+    }
+    if (this.state.timerOn === true) {
+      return <button onClick={this.stopTimer}>Pause</button>;
+    }
+    if (this.state.timerOn === false && this.state.timerTime > 0) {
+      return (
+        <div>
+          <button onClick={this.startTimer}>Resume</button>{" "}
+          <button onClick={this.resetTimer}>Reset</button>
+        </div>
+      );
+    }
+  }
+
   render() {
     if (this.props.workoutUpdated) {
       this.handleUpdateSignal();
@@ -123,8 +141,6 @@ class Stopwatch extends Component {
 
     let exerciseSeconds = Math.floor(exerciseMilis / 1000);
     let exerciseLeft = this.currentExercise.duration - exerciseSeconds;
-    let exerciseProgress =
-      exerciseMilis / (this.currentExercise.duration * 1000);
 
     if (
       this.state.timerOn &&
@@ -143,23 +159,77 @@ class Stopwatch extends Component {
 
         {!this.state.timerFinished && (
           <div>
-            <div>Exercises left: {this.events.length + 1}</div>
-
             <div>Current exersice:</div>
-            <h2 style={{ margin: 0, paddingBottom: "30px" }}>
+            <Typography
+              variant="h2"
+              style={{
+                paddingBottom: "30px",
+                margin: "0",
+              }}
+            >
               {this.currentExercise.name}
-            </h2>
-
-            <div style={{ justifyContent: "center", display: "flex" }}>
-              <h4 style={{ margin: 0 }}>Exercise progress: </h4>
-              &nbsp;&nbsp;
-              {(exerciseProgress * 100).toFixed(0)} %
+            </Typography>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <h4 style={{ position: "absolute", margin: 0 }}>
+                {this.timeFormatter(exerciseLeft * 1000)}
+              </h4>
+              <div style={{ position: "absolute" }}>
+                <CircularProgress
+                  variant="static"
+                  value={
+                    100 -
+                    parseInt(
+                      (
+                        exerciseMilis /
+                        (this.currentExercise.duration * 10)
+                      ).toFixed(0)
+                    )
+                  }
+                  size={180}
+                  thickness={5}
+                />
+              </div>
+              <CircularProgress
+                variant="static"
+                value={parseInt(
+                  ((totalSeconds / this.totalDuration) * 100).toFixed(0)
+                )}
+                size={220}
+                thickness={2}
+              />
             </div>
 
-            <div style={{ justifyContent: "center", display: "flex" }}>
-              <h4 style={{ margin: 0 }}>Exercise time: </h4>
-              &nbsp;&nbsp;
-              {this.timeFormatter(exerciseLeft * 1000)}
+            <div style={{ marginTop: "30px" }}>{this.getButtons()}</div>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "30px",
+              }}
+            >
+              <div
+                className="Stopwatch-display"
+                style={{ justifyContent: "center" }}
+              >
+                Time elapsed:
+                <h4 style={{ margin: 0 }}>{this.timeFormatter(timerTime)}</h4>
+              </div>
+
+              <div style={{ minWidth: "40px" }} />
+
+              <div style={{ justifyContent: "center" }}>
+                Exercises left:
+                <h4 style={{ margin: 0 }}>
+                  {this.events.length + 1}/{this.props.workout.exercises.length}
+                </h4>
+              </div>
             </div>
           </div>
         )}
@@ -168,34 +238,6 @@ class Stopwatch extends Component {
           <div>
             <h3>Workout done! Congratulations!</h3>
           </div>
-        )}
-
-        <div
-          className="Stopwatch-display"
-          style={{ justifyContent: "center", display: "flex" }}
-        >
-          <h4 style={{ margin: 0 }}>Time elapsed: </h4>
-          &nbsp;&nbsp;
-          {this.timeFormatter(timerTime)}
-        </div>
-        
-        <div style={{ justifyContent: "center", display: "flex" }}>
-          <h4 style={{ margin: 0 }}>Workout duration: </h4>
-          &nbsp;&nbsp;
-          {this.timeFormatter(this.totalDuration * 1000)}
-        </div>
-
-        {this.state.timerOn === false && this.state.timerTime === 0 && (
-          <button onClick={this.startTimer}>Start</button>
-        )}
-        {this.state.timerOn === true && (
-          <button onClick={this.stopTimer}>Pause</button>
-        )}
-        {this.state.timerOn === false && this.state.timerTime > 0 && (
-          <button onClick={this.startTimer}>Resume</button>
-        )}
-        {this.state.timerOn === false && this.state.timerTime > 0 && (
-          <button onClick={this.resetTimer}>Reset</button>
         )}
       </div>
     );
