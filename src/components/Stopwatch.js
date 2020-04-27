@@ -11,7 +11,7 @@ class Stopwatch extends Component {
     timerOn: false,
     timerTime: 0,
     timerStart: 0,
-    currentExercice: "",
+    currentExercise: "",
   };
 
   startTimer = () => {
@@ -45,10 +45,12 @@ class Stopwatch extends Component {
 
   startEvents() {
     // Initialize the loop:
-    this.events = [...this.props.events];
+    this.events = [...this.props.workout.exercises];
 
-    // Assign the first exercice after checking it exists
-    this.currentExercice = this.events.shift() || this.events.length > 0;
+    this.totalDuration = this.props.workout.duration;
+
+    // Assign the first exercise after checking it exists
+    this.currentExercise = this.events.shift() || this.events.length > 0;
 
     // this.state.timerTime = 0;
     this.setState({ timerTime: 0 });
@@ -61,10 +63,10 @@ class Stopwatch extends Component {
   }
 
   getNextExercise() {
-    var nextExercice = this.events.shift();
-    console.log(nextExercice);
+    var nextExercise = this.events.shift();
+    console.log(nextExercise);
     this.props.notifyChange();
-    return nextExercice;
+    return nextExercise;
   }
 
   changeExercise(totalSeconds) {
@@ -72,11 +74,11 @@ class Stopwatch extends Component {
       this.workoutFinished();
     } else {
       this.lastStart = totalSeconds;
-      this.currentExercice = this.getNextExercise();
+      this.currentExercise = this.getNextExercise();
 
       console.log(
-        `${("000" + totalSeconds).slice(-3)} Exercice changed to: ${
-          this.currentExercice.name
+        `${("000" + totalSeconds).slice(-3)} Exercise changed to: ${
+          this.currentExercise.name
         }`
       );
     }
@@ -103,30 +105,30 @@ class Stopwatch extends Component {
 
   handleUpdateSignal() {
     // console.log("Update signal recieved");
-    this.props.setExercicesUpdated(false);
+    this.props.setWorkoutUpdated(false);
     this.stopTimer();
     this.resetTimer();
-    console.log("Exercices updated");
+    console.log("Workout updated");
   }
 
   render() {
-    if (this.props.exercicesUpdated) {
+    if (this.props.workoutUpdated) {
       this.handleUpdateSignal();
     }
 
     const { timerTime } = this.state;
 
     let totalSeconds = Math.floor(timerTime / 1000);
-    let exerciceMilis = timerTime - this.lastStart * 1000;
+    let exerciseMilis = timerTime - this.lastStart * 1000;
 
-    let exerciceSeconds = Math.floor(exerciceMilis / 1000);
-    let exerciceLeft = this.currentExercice.duration - exerciceSeconds;
-    let exerciceProgress =
-      exerciceMilis / (this.currentExercice.duration * 1000);
+    let exerciseSeconds = Math.floor(exerciseMilis / 1000);
+    let exerciseLeft = this.currentExercise.duration - exerciseSeconds;
+    let exerciseProgress =
+      exerciseMilis / (this.currentExercise.duration * 1000);
 
     if (
       this.state.timerOn &&
-      exerciceSeconds >= this.currentExercice.duration
+      exerciseSeconds >= this.currentExercise.duration
     ) {
       this.changeExercise(totalSeconds);
     }
@@ -141,23 +143,23 @@ class Stopwatch extends Component {
 
         {!this.state.timerFinished && (
           <div>
-            <div>Exercices left: {this.events.length + 1}</div>
+            <div>Exercises left: {this.events.length + 1}</div>
 
-            <div>Current exercice:</div>
+            <div>Current exersice:</div>
             <h2 style={{ margin: 0, paddingBottom: "30px" }}>
-              {this.currentExercice.name}
+              {this.currentExercise.name}
             </h2>
 
             <div style={{ justifyContent: "center", display: "flex" }}>
-              <h4 style={{ margin: 0 }}>Exercice progress: </h4>
+              <h4 style={{ margin: 0 }}>Exercise progress: </h4>
               &nbsp;&nbsp;
-              {(exerciceProgress * 100).toFixed(0)} %
+              {(exerciseProgress * 100).toFixed(0)} %
             </div>
 
             <div style={{ justifyContent: "center", display: "flex" }}>
-              <h4 style={{ margin: 0 }}>Exercice time: </h4>
+              <h4 style={{ margin: 0 }}>Exercise time: </h4>
               &nbsp;&nbsp;
-              {this.timeFormatter(exerciceLeft * 1000)}
+              {this.timeFormatter(exerciseLeft * 1000)}
             </div>
           </div>
         )}
@@ -172,9 +174,15 @@ class Stopwatch extends Component {
           className="Stopwatch-display"
           style={{ justifyContent: "center", display: "flex" }}
         >
-          <h4 style={{ margin: 0 }}>Total time: </h4>
+          <h4 style={{ margin: 0 }}>Time elapsed: </h4>
           &nbsp;&nbsp;
           {this.timeFormatter(timerTime)}
+        </div>
+        
+        <div style={{ justifyContent: "center", display: "flex" }}>
+          <h4 style={{ margin: 0 }}>Workout duration: </h4>
+          &nbsp;&nbsp;
+          {this.timeFormatter(this.totalDuration * 1000)}
         </div>
 
         {this.state.timerOn === false && this.state.timerTime === 0 && (

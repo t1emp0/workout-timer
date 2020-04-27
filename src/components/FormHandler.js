@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import Stopwatch from "./Stopwatch";
-import inputToExerciceArray from "./InputParser";
+import inputToExerciseDict from "./InputParser";
 import { TextField } from "@material-ui/core";
 
 class FormHandler extends Component {
@@ -10,8 +10,8 @@ class FormHandler extends Component {
     this.state = {
       textBox: "",
       textInput: "",
-      exercicesUpdated: false,
-      exercices: [],
+      workoutUpdated: false,
+      workout: {exercises:  []},
       showEditing: true,
     };
 
@@ -19,15 +19,15 @@ class FormHandler extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleEditExercices = this.handleEditExercices.bind(this);
-    this.setExercicesUpdated = this.setExercicesUpdated.bind(this);
+    this.handleEditWorkout = this.handleEditWorkout.bind(this);
+    this.setWorkoutUpdated = this.setWorkoutUpdated.bind(this);
   }
 
-  setExercicesUpdated = (state) => {
-    this.setState({ exercicesUpdated: state });
+  setWorkoutUpdated = (state) => {
+    this.setState({ workoutUpdated: state });
   };
 
-  handleEditExercices = () => {
+  handleEditWorkout = () => {
     this.setState({ showEditing: true});
   }
   
@@ -38,8 +38,8 @@ class FormHandler extends Component {
   handleSubmit = (event) => {
     this.setState({
       textInput: this.state.textBox,
-      exercices: inputToExerciceArray(this.state.textBox),
-      exercicesUpdated: true,
+      workout: inputToExerciseDict(this.state.textBox),
+      workoutUpdated: true,
       showEditing: false,
     });
     event.preventDefault();
@@ -56,7 +56,7 @@ class FormHandler extends Component {
                   width: "80%",
                 }}
                 type="text"
-                name="exercices"
+                name="exercises"
                 multiline
                 value={this.state.textBox}
                 onChange={this.handleChange}
@@ -67,17 +67,17 @@ class FormHandler extends Component {
         )}
 
         {!this.state.showEditing && (
-          <button onClick={this.handleEditExercices}>
-            Edit exercices
+          <button onClick={this.handleEditWorkout}>
+            Edit exercises
           </button>
         )}
 
-        {this.state.exercices.length > 0 && (
+        {this.state.workout.exercises.length > 0 && (
           <div>
             <Stopwatch
-              events={this.state.exercices}
-              exercicesUpdated={this.state.exercicesUpdated}
-              setExercicesUpdated={this.setExercicesUpdated}
+              workout={this.state.workout}
+              workoutUpdated={this.state.workoutUpdated}
+              setWorkoutUpdated={this.setWorkoutUpdated}
               notifyChange={this.props.notifyChange}
             />
           </div>

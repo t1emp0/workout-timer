@@ -4,42 +4,51 @@
  *      (Difference between "," or "+"?)
  * [X] 2- Deal with different quotation marks
  *      (Convert all time to s)
- * [X] 3- Deal with exercice blocks
+ * [X] 3- Deal with exercise blocks
  *      (By simply looping over n times?)
  * [X] 4- Change "x"s for "*" where needed
- *      (If it is in the middle of an exercice, better not)
- * [ ] 5- Deal with comments for each exercice
+ *      (If it is in the middle of an exercise, better not)
+ * [ ] 5- Deal with comments for each exercise
  *      (Just adding them to the screen)
- * [ ] 6- Deal with intensity for each exercice
+ * [ ] 6- Deal with intensity for each exercise
  *      (And then show some sort of indication)
  */
 
 /**
- * @desc Transforms the long string into an array of exercices
- * @param {string} input A correctly formatted exercice session (see documentation)
- * @return The array containing a dict for each exercice
+ * @desc Transforms the long string into an array of exercises
+ * @param {string} input A correctly formatted workout session (see documentation)
+ * @return {dict} A dict containing an array made up of a dict for each exercise and the total duration.
  */
-export function inputToExerciceArray(input) {
+export function inputToExerciseDict(input) {
   let replaced = makeTextReplacements(input);
   console.log(replaced);
   let full = computeRepetition(replaced);
   let splitted = full.split(",");
 
-  let exercices = [];
+  let exercises = [];
+  let totalSeconds = 0;
 
   splitted.forEach((ex) => {
     let exInSeconds = convertToSeconds(ex);
     let [exDuration, exName] = exInSeconds.split('"');
+    totalSeconds += parseInt(exDuration.trim());
 
-    let exercice = {
+    let exercise = {
       duration: exDuration.trim(),
       name: exName.trim(),
     };
 
-    exercices.push(exercice);
+    exercises.push(exercise);
   });
 
-  return exercices;
+  let workout = {
+    exercises: exercises,
+    duration: totalSeconds,
+  };
+
+  console.log(workout.duration);
+
+  return workout;
 }
 
 /**
@@ -82,7 +91,7 @@ function isLetter(char) {
 }
 
 /**
- * @desc Expands the exercice blocks given in the input.
+ * @desc Expands the exercise blocks given in the input.
  * @param {string} input
  * @returns {string} with the blocks expanded
  */
@@ -167,23 +176,23 @@ function repeatBlock(block, numTimes) {
 
 /**
  * @desc Converts excercice duration to seconds
- * @param {string} exercice in form: MM'SS" exerciceName
- * @return The same exercice but with the duration in seconds
+ * @param {string} exercise in form: MM'SS" exerciseName
+ * @return The same exercise but with the duration in seconds
  */
-function convertToSeconds(exercice) {
-  let sIndex = exercice.indexOf('"');
-  let mIndex = exercice.indexOf("'");
+function convertToSeconds(exercise) {
+  let sIndex = exercise.indexOf('"');
+  let mIndex = exercise.indexOf("'");
   if (mIndex === -1) {
-    return exercice;
+    return exercise;
   } else if (sIndex === -1) {
-    let mins = exercice.slice(0, mIndex);
-    return (60 * mins).toString() + '"' + exercice.slice(mIndex + 1);
+    let mins = exercise.slice(0, mIndex);
+    return (60 * mins).toString() + '"' + exercise.slice(mIndex + 1);
   } else {
-    let mins = exercice.slice(0, mIndex);
-    let secs = exercice.slice(mIndex + 1, sIndex);
+    let mins = exercise.slice(0, mIndex);
+    let secs = exercise.slice(mIndex + 1, sIndex);
     let totalSeconds = 60 * mins + parseInt(secs);
-    return totalSeconds.toString() + '"' + exercice.slice(sIndex + 1);
+    return totalSeconds.toString() + '"' + exercise.slice(sIndex + 1);
   }
 }
 
-export default inputToExerciceArray;
+export default inputToExerciseDict;
