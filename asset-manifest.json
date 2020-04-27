@@ -1,19 +1,19 @@
 {
   "files": {
     "main.css": "/workout-timer/static/css/main.523f09c5.chunk.css",
-    "main.js": "/workout-timer/static/js/main.dcd3d8cc.chunk.js",
-    "main.js.map": "/workout-timer/static/js/main.dcd3d8cc.chunk.js.map",
+    "main.js": "/workout-timer/static/js/main.ad4a899c.chunk.js",
+    "main.js.map": "/workout-timer/static/js/main.ad4a899c.chunk.js.map",
     "runtime-main.js": "/workout-timer/static/js/runtime-main.8afb4986.js",
     "runtime-main.js.map": "/workout-timer/static/js/runtime-main.8afb4986.js.map",
     "static/css/2.b7564337.chunk.css": "/workout-timer/static/css/2.b7564337.chunk.css",
-    "static/js/2.2aa406b8.chunk.js": "/workout-timer/static/js/2.2aa406b8.chunk.js",
-    "static/js/2.2aa406b8.chunk.js.map": "/workout-timer/static/js/2.2aa406b8.chunk.js.map",
+    "static/js/2.555d46f1.chunk.js": "/workout-timer/static/js/2.555d46f1.chunk.js",
+    "static/js/2.555d46f1.chunk.js.map": "/workout-timer/static/js/2.555d46f1.chunk.js.map",
     "index.html": "/workout-timer/index.html",
-    "precache-manifest.6112b205a2a19b7620a099d1714cfff4.js": "/workout-timer/precache-manifest.6112b205a2a19b7620a099d1714cfff4.js",
+    "precache-manifest.8ed8c6311a4e68c9be3e93031dc6b596.js": "/workout-timer/precache-manifest.8ed8c6311a4e68c9be3e93031dc6b596.js",
     "service-worker.js": "/workout-timer/service-worker.js",
     "static/css/2.b7564337.chunk.css.map": "/workout-timer/static/css/2.b7564337.chunk.css.map",
     "static/css/main.523f09c5.chunk.css.map": "/workout-timer/static/css/main.523f09c5.chunk.css.map",
-    "static/js/2.2aa406b8.chunk.js.LICENSE.txt": "/workout-timer/static/js/2.2aa406b8.chunk.js.LICENSE.txt",
+    "static/js/2.555d46f1.chunk.js.LICENSE.txt": "/workout-timer/static/js/2.555d46f1.chunk.js.LICENSE.txt",
     "static/media/inter.css": "/workout-timer/static/media/Inter.var.7e1eda3a.woff2",
     "static/media/bells.mp3": "/workout-timer/static/media/bells.b62cc0d9.mp3",
     "static/media/index.css": "/workout-timer/static/media/montserrat-latin-900italic.a8ec4957.woff"
@@ -21,8 +21,8 @@
   "entrypoints": [
     "static/js/runtime-main.8afb4986.js",
     "static/css/2.b7564337.chunk.css",
-    "static/js/2.2aa406b8.chunk.js",
+    "static/js/2.555d46f1.chunk.js",
     "static/css/main.523f09c5.chunk.css",
-    "static/js/main.dcd3d8cc.chunk.js"
+    "static/js/main.ad4a899c.chunk.js"
   ]
 }
