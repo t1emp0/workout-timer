@@ -23,7 +23,7 @@ function timeFormatter(timeMilis) {
   return output;
 }
 
-function getState(timerOn, timerTime) {
+function getTimerState(timerOn, timerTime) {
   //  DIFFERENT STATES:
   if (timerOn) {
     return "Playing";
@@ -50,16 +50,17 @@ class Stopwatch extends Component {
   };
 
   startTimer = () => {
-    this.setState({
+    this.setState( (state) => ({
       timerOn: true,
-      timerTime: this.state.timerTime,
-      timerStart: Date.now() - this.state.timerTime,
+      // timerTime: state.timerTime,
+      timerStart: Date.now() - state.timerTime,
       timerFinished: false,
-    });
+    }));
+
     this.timer = setInterval(() => {
-      this.setState({
-        timerTime: Date.now() - this.state.timerStart,
-      });
+      this.setState( (state) => ({
+        timerTime: Date.now() - state.timerStart,
+      }));
     }, 10);
     this.i = 0;
   };
@@ -128,7 +129,7 @@ class Stopwatch extends Component {
   }
 
   getButtons() {
-    const status = getState(this.state.timerOn, this.state.timerTime);
+    const status = getTimerState(this.state.timerOn, this.state.timerTime);
     return (
       <ControlButons
         status={status}

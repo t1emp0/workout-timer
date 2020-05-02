@@ -1,10 +1,17 @@
-import React, { Component } from "react";
+import React, { useState, useCallback } from "react";
 
 import Stopwatch from "./Stopwatch";
 import inputToExerciseDict from "./InputParser";
 import { TextField } from "@material-ui/core";
 
-class FormHandler extends Component {
+
+function FormHandler(props) {
+  let [textBox, setTextBox] = useState('15" Squats + 2x(15"Plank + 15"Burpees) + 15" Flex');
+  let [workoutUpdated, setWorkoutUpdated] = useState(false);
+  let [showEditing, setShowEditing] = useState(true);
+  let [workout, setWorkout] = useState({ exercises: [] });
+
+  /*
   constructor(props) {
     super(props);
     this.state = {
@@ -21,70 +28,61 @@ class FormHandler extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleEditWorkout = this.handleEditWorkout.bind(this);
     this.setWorkoutUpdated = this.setWorkoutUpdated.bind(this);
-  }
+  }*/
 
-  setWorkoutUpdated = (state) => {
-    this.setState({ workoutUpdated: state });
+  const handleEditWorkout = () => {
+    setShowEditing(true);
   };
 
-  handleEditWorkout = () => {
-    this.setState({ showEditing: true});
-  }
-  
-  handleChange = (event) => {
-    this.setState({ textBox: event.target.value });
-  };
+  const handleSubmit = useCallback(
+    (event) => {
+      setWorkout(inputToExerciseDict(textBox));
+      setWorkoutUpdated(true);
+      setShowEditing(false);
 
-  handleSubmit = (event) => {
-    this.setState({
-      textInput: this.state.textBox,
-      workout: inputToExerciseDict(this.state.textBox),
-      workoutUpdated: true,
-      showEditing: false,
-    });
-    event.preventDefault();
-  };
+      event.preventDefault();
+    },
+    [textBox, setWorkout, setWorkoutUpdated, setShowEditing]
+  );
 
-  render() {
-    return (
-      <div>
-        {this.state.showEditing && (
-          <form onSubmit={this.handleSubmit}>
-            <div>
-              <TextField
-                style={{
-                  width: "80%",
-                }}
-                type="text"
-                name="exercises"
-                multiline
-                value={this.state.textBox}
-                onChange={this.handleChange}
-              />
-            </div>
-            <input type="submit" value="Submit" />
-          </form>
-        )}
-
-        {!this.state.showEditing && (
-          <button onClick={this.handleEditWorkout}>
-            Edit exercises
-          </button>
-        )}
-
-        {this.state.workout.exercises.length > 0 && (
+  return (
+    <div>
+      {showEditing && (
+        <form onSubmit={handleSubmit}>
           <div>
-            <Stopwatch
-              workout={this.state.workout}
-              workoutUpdated={this.state.workoutUpdated}
-              setWorkoutUpdated={this.setWorkoutUpdated}
-              notifyChange={this.props.notifyChange}
+            <TextField
+              style={{
+                width: "80%",
+              }}
+              type="text"
+              name="exercises"
+              multiline
+              value={textBox}
+              onChange={ (e) => {
+                setTextBox(e.target.value)
+              }}
             />
           </div>
-        )}
-      </div>
-    );
-  }
+          <input type="submit" value="Submit" />
+        </form>
+      )}
+
+      {!showEditing && (
+        <button onClick={handleEditWorkout}>Edit exercises</button>
+      )}
+
+      {workout.exercises.length > 0 && (
+        <div>
+          <Stopwatch
+            workout={workout}
+            workoutUpdated={workoutUpdated}
+            setWorkoutUpdated={setWorkoutUpdated}
+            notifyChange={props.notifyChange}
+          />
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default FormHandler;
