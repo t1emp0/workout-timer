@@ -6,21 +6,19 @@ import inputToExerciseDict from "./InputParser";
 
 function FormHandler(props) {
   let [textBox, setTextBox] = useState(
-    '15" Squats + 2x(15"Plank + 15"Burpees) + 15" Flex'
+    '5" Squats + 2x(15"Plank + 15"Burpees) + 15" Flex'
   );
-  let [workoutUpdated, setWorkoutUpdated] = useState(false);
   let [showEditing, setShowEditing] = useState(true);
   let [workout, setWorkout] = useState({ exercises: [] });
 
   const handleSubmit = useCallback(
     (event) => {
       setWorkout(inputToExerciseDict(textBox));
-      setWorkoutUpdated(true);
       setShowEditing(false);
 
       event.preventDefault();
     },
-    [textBox, setWorkout, setWorkoutUpdated, setShowEditing]
+    [textBox, setWorkout, setShowEditing]
   );
 
   return (
@@ -51,12 +49,7 @@ function FormHandler(props) {
 
       {workout.exercises.length > 0 && (
         <div>
-          <Stopwatch
-            workout={workout}
-            workoutUpdated={workoutUpdated}
-            setWorkoutUpdated={setWorkoutUpdated}
-            notifyChange={props.notifyChange}
-          />
+          <Stopwatch workout={workout} notifyChange={props.notifyChange} />
         </div>
       )}
     </div>

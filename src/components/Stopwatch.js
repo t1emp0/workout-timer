@@ -1,5 +1,5 @@
 import "../App.css";
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, CircularProgress } from "@material-ui/core";
 
 import ControlButons from "./ControlButtons";
@@ -41,220 +41,187 @@ function getButtons(timerOn, timerTime, controlFunctions) {
   return <ControlButons status={status} controlFunctions={controlFunctions} />;
 }
 
-class Stopwatch extends Component {
-  constructor(props) {
-    super(props);
-    console.log("Stopwatch constructor called");
-  }
+function Stopwatch(props) {
+  const [timerOn, setTimerOn] = useState(false);
+  const [timerTime, setTimerTime] = useState(0);
+  const [timerFinished, setTimerFinished] = useState(false);
+  const [currentExercise, setCurrentExercise] = useState("");
 
-  state = {
-    timerOn: false,
-    timerTime: 0,
-    timerStart: 0,
-    currentExercise: "",
-    timerFinished: false,
+  let [events, setEvents] = useState([]);
+  const [lastStart, setLastStart] = useState(0);
+  const [timer, setTimer] = useState("");
+
+  const startTimer = () => {
+    setTimerOn(true);
+    setTimerFinished(false);
+    setTimerTime(timerTime);
+    let startTime = Date.now() - timerTime;
+
+    setTimer(
+      setInterval(() => {
+        setTimerTime(Date.now() - startTime);
+      }, 10)
+    );
   };
 
-  startTimer = () => {
-    this.setState((state) => ({
-      timerOn: true,
-      // timerTime: state.timerTime,
-      timerStart: Date.now() - state.timerTime,
-      timerFinished: false,
-    }));
-
-    this.timer = setInterval(() => {
-      this.setState((state) => ({
-        timerTime: Date.now() - state.timerStart,
-      }));
-    }, 10);
-    this.i = 0;
+  const pauseTimer = () => {
+    setTimerOn(false);
+    clearInterval(timer);
   };
 
-  pauseTimer = () => {
-    this.setState({ timerOn: false });
-    clearInterval(this.timer);
+  const resetTimer = () => {
+    setTimerTime(0);
+    setTimerFinished(false);
+
+    startEvents();
   };
 
-  resetTimer = () => {
-    this.setState({
-      timerStart: 0,
-      timerTime: 0,
-      timerFinished: false,
-    });
-    this.startEvents();
+  const startEvents = () => {
+    let localEvents = [...props.workout.exercises];
+
+    if (localEvents.length > 0) {
+      setCurrentExercise(localEvents.shift());
+    }
+    setEvents(localEvents);
+    setLastStart(0);
   };
 
-  startEvents() {
-    // Initialize the loop:
-    this.events = [...this.props.workout.exercises];
+  const workoutFinished = () => {
+    setTimerFinished(true);
+    pauseTimer();
+  };
 
-    this.totalDuration = this.props.workout.duration;
-
-    // Assign the first exercise after checking it exists
-    this.currentExercise = this.events.shift() || this.events.length > 0;
-
-    // this.state.timerTime = 0;
-    this.setState({ timerTime: 0 });
-    this.lastStart = 0;
-  }
-
-  workoutFinished() {
-    this.setState({ timerFinished: true });
-    this.pauseTimer();
-  }
-
-  getNextExercise() {
-    var nextExercise = this.events.shift();
-    console.log(nextExercise);
-    this.props.notifyChange();
+  const getNextExercise = () => {
+    let localEvents = [...events];
+    let nextExercise = localEvents.shift();
+    props.notifyChange();
+    setEvents(localEvents);
     return nextExercise;
-  }
+  };
 
-  changeExercise(totalSeconds) {
-    if (this.events.length === 0) {
-      this.workoutFinished();
+  const changeExercise = (totalSeconds) => {
+    if (events.length === 0) {
+      workoutFinished();
     } else {
-      this.lastStart = totalSeconds;
-      this.currentExercise = this.getNextExercise();
-
-      console.log(
-        `${("000" + totalSeconds).slice(-3)} Exercise changed to: ${
-          this.currentExercise.name
-        }`
-      );
+      setLastStart(totalSeconds);
+      setCurrentExercise(getNextExercise());
     }
+  };
+
+  const handleUpdateSignal = () => {
+    pauseTimer();
+    resetTimer();
+  };
+
+  useEffect(() => {
+    handleUpdateSignal();
+  }, [props.workout]);
+
+  let totalSeconds = Math.floor(timerTime / 1000);
+  let exerciseMilis = timerTime - lastStart * 1000;
+  let exerciseSeconds = Math.floor(exerciseMilis / 1000);
+  let exerciseLeft = currentExercise.duration - exerciseSeconds;
+
+  if (timerOn && exerciseSeconds >= currentExercise.duration) {
+    changeExercise(totalSeconds);
   }
 
-  handleUpdateSignal() {
-    // console.log("Update signal recieved");
-    this.props.setWorkoutUpdated(false);
-    this.pauseTimer();
-    this.resetTimer();
-    console.log("Workout updated");
-  }
-
-  render() {
-    if (this.props.workoutUpdated) {
-      this.handleUpdateSignal();
-    }
-
-    const { timerTime } = this.state;
-
-    let totalSeconds = Math.floor(timerTime / 1000);
-    let exerciseMilis = timerTime - this.lastStart * 1000;
-
-    let exerciseSeconds = Math.floor(exerciseMilis / 1000);
-    let exerciseLeft = this.currentExercise.duration - exerciseSeconds;
-
-    if (
-      this.state.timerOn &&
-      exerciseSeconds >= this.currentExercise.duration
-    ) {
-      this.changeExercise(totalSeconds);
-    }
-
-    return (
-      <div className="Stopwatch" style={{ paddingTop: "30px" }}>
-        {this.state.timerTime === 0 && (
-          <div>
-            <h3>Ready to begin workout. Press start!</h3>
-          </div>
-        )}
-
-        {!this.state.timerFinished && (
-          <div>
-            <div>Current exercise:</div>
+  return (
+    <div className="Stopwatch" style={{ paddingTop: "30px" }}>
+      {timerTime === 0 && (
+        <div>
+          <h3>Ready to begin workout. Press start!</h3>
+        </div>
+      )}
+      {!timerFinished && (
+        <div>
+          <div>Current exercise:</div>
+          <Typography
+            variant="h2"
+            style={{
+              paddingBottom: "30px",
+              margin: "0",
+            }}
+          >
+            {currentExercise.name}
+          </Typography>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <Typography
-              variant="h2"
-              style={{
-                paddingBottom: "30px",
-                margin: "0",
-              }}
+              variant="h4"
+              style={{ position: "absolute", margin: 0 }}
             >
-              {this.currentExercise.name}
+              {timeFormatter(exerciseLeft * 1000)}
             </Typography>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Typography
-                variant="h4"
-                style={{ position: "absolute", margin: 0 }}
-              >
-                {timeFormatter(exerciseLeft * 1000)}
-              </Typography>
-              <div style={{ position: "absolute" }}>
-                <CircularProgress
-                  variant="static"
-                  value={
-                    100 -
-                    parseInt(
-                      exerciseMilis / (this.currentExercise.duration * 10)
-                    )
-                  }
-                  size={200}
-                  thickness={5}
-                />
-              </div>
+            <div style={{ position: "absolute" }}>
               <CircularProgress
                 variant="static"
-                // Could make this value update with seconds. Better?
-                // TODO: Check which way users like best.
-                value={parseInt(timerTime / this.totalDuration / 10)}
-                size={250}
-                thickness={2}
+                value={
+                  100 -
+                  parseInt(exerciseMilis / (currentExercise.duration * 10))
+                }
+                size={200}
+                thickness={5}
               />
             </div>
+            <CircularProgress
+              variant="static"
+              // Could make this value update with seconds. Better?
+              // TODO: Check which way users like best.
+              value={parseInt(timerTime / props.workout.duration / 10)}
+              size={250}
+              thickness={2}
+            />
+          </div>
 
-            <div style={{ paddingTop: "30px" }}>
-              {getButtons(this.state.timerOn, this.state.timerTime, [
-                this.startTimer,
-                this.pauseTimer,
-                this.resetTimer,
-              ])}
-            </div>
+          <div style={{ paddingTop: "30px" }}>
+            {getButtons(timerOn, timerTime, [
+              startTimer,
+              pauseTimer,
+              resetTimer,
+            ])}
+          </div>
 
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "30px",
+            }}
+          >
             <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "30px",
-              }}
+              style={{ justifyContent: "center" }}
             >
-              <div
-                className="Stopwatch-display"
-                style={{ justifyContent: "center" }}
-              >
-                Time elapsed:
-                <h4 style={{ margin: 0, fontSize: "20px" }}>
-                  {timeFormatter(timerTime)}
-                </h4>
-              </div>
+              Time elapsed:
+              <h4 style={{ margin: 0, fontSize: "20px" }}>
+                {timeFormatter(timerTime)}
+              </h4>
+            </div>
 
-              <div style={{ minWidth: "40px" }} />
+            <div style={{ minWidth: "40px" }} />
 
-              <div style={{ justifyContent: "center" }}>
-                Exercises left:
-                <h4 style={{ margin: 0, fontSize: "20px" }}>
-                  {this.events.length + 1}/{this.props.workout.exercises.length}
-                </h4>
-              </div>
+            <div style={{ justifyContent: "center" }}>
+              Exercises left:
+              <h4 style={{ margin: 0, fontSize: "20px" }}>
+                {events.length + 1}/{props.workout.exercises.length}
+              </h4>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {this.state.timerFinished && this.state.timerTime !== 0 && (
-          <div>
-            <h3>Workout done! Congratulations!</h3>
-          </div>
-        )}
-      </div>
-    );
-  }
+      {timerFinished && timerTime !== 0 && (
+        <div>
+          <h3>Workout done! Congratulations!</h3>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default Stopwatch;
