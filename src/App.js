@@ -1,9 +1,9 @@
 import "./App.css";
 import React from "react";
+import { Typography } from "@material-ui/core";
 
 import FormHandler from "./components/FormHandler";
 import notifyChange from "./components/ChangeNotifier";
-import { Typography } from "@material-ui/core";
 
 function App() {
   return (

@@ -1,38 +1,16 @@
 import React, { useState, useCallback } from "react";
+import { TextField } from "@material-ui/core";
 
 import Stopwatch from "./Stopwatch";
 import inputToExerciseDict from "./InputParser";
-import { TextField } from "@material-ui/core";
-
 
 function FormHandler(props) {
-  let [textBox, setTextBox] = useState('15" Squats + 2x(15"Plank + 15"Burpees) + 15" Flex');
+  let [textBox, setTextBox] = useState(
+    '15" Squats + 2x(15"Plank + 15"Burpees) + 15" Flex'
+  );
   let [workoutUpdated, setWorkoutUpdated] = useState(false);
   let [showEditing, setShowEditing] = useState(true);
   let [workout, setWorkout] = useState({ exercises: [] });
-
-  /*
-  constructor(props) {
-    super(props);
-    this.state = {
-      textBox: "",
-      textInput: "",
-      workoutUpdated: false,
-      workout: {exercises:  []},
-      showEditing: true,
-    };
-
-    this.state.textBox = '15" Squats + 2x(15"Plank + 15"Burpees) + 15" Flex';
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleEditWorkout = this.handleEditWorkout.bind(this);
-    this.setWorkoutUpdated = this.setWorkoutUpdated.bind(this);
-  }*/
-
-  const handleEditWorkout = () => {
-    setShowEditing(true);
-  };
 
   const handleSubmit = useCallback(
     (event) => {
@@ -58,8 +36,8 @@ function FormHandler(props) {
               name="exercises"
               multiline
               value={textBox}
-              onChange={ (e) => {
-                setTextBox(e.target.value)
+              onChange={(e) => {
+                setTextBox(e.target.value);
               }}
             />
           </div>
@@ -68,7 +46,7 @@ function FormHandler(props) {
       )}
 
       {!showEditing && (
-        <button onClick={handleEditWorkout}>Edit exercises</button>
+        <button onClick={() => setShowEditing(true)}>Edit exercises</button>
       )}
 
       {workout.exercises.length > 0 && (

@@ -36,6 +36,11 @@ function getTimerState(timerOn, timerTime) {
   }
 }
 
+function getButtons(timerOn, timerTime, controlFunctions) {
+  const status = getTimerState(timerOn, timerTime);
+  return <ControlButons status={status} controlFunctions={controlFunctions} />;
+}
+
 class Stopwatch extends Component {
   constructor(props) {
     super(props);
@@ -47,10 +52,11 @@ class Stopwatch extends Component {
     timerTime: 0,
     timerStart: 0,
     currentExercise: "",
+    timerFinished: false,
   };
 
   startTimer = () => {
-    this.setState( (state) => ({
+    this.setState((state) => ({
       timerOn: true,
       // timerTime: state.timerTime,
       timerStart: Date.now() - state.timerTime,
@@ -58,7 +64,7 @@ class Stopwatch extends Component {
     }));
 
     this.timer = setInterval(() => {
-      this.setState( (state) => ({
+      this.setState((state) => ({
         timerTime: Date.now() - state.timerStart,
       }));
     }, 10);
@@ -128,18 +134,6 @@ class Stopwatch extends Component {
     console.log("Workout updated");
   }
 
-  getButtons() {
-    const status = getTimerState(this.state.timerOn, this.state.timerTime);
-    return (
-      <ControlButons
-        status={status}
-        startTimer={this.startTimer}
-        pauseTimer={this.pauseTimer}
-        resetTimer={this.resetTimer}
-      />
-    );
-  }
-
   render() {
     if (this.props.workoutUpdated) {
       this.handleUpdateSignal();
@@ -199,10 +193,7 @@ class Stopwatch extends Component {
                   value={
                     100 -
                     parseInt(
-                      (
-                        exerciseMilis /
-                        (this.currentExercise.duration * 10)
-                      ).toFixed(0)
+                      exerciseMilis / (this.currentExercise.duration * 10)
                     )
                   }
                   size={200}
@@ -211,15 +202,21 @@ class Stopwatch extends Component {
               </div>
               <CircularProgress
                 variant="static"
-                value={parseInt(
-                  ((totalSeconds / this.totalDuration) * 100).toFixed(0)
-                )}
+                // Could make this value update with seconds. Better?
+                // TODO: Check which way users like best.
+                value={parseInt(timerTime / this.totalDuration / 10)}
                 size={250}
                 thickness={2}
               />
             </div>
 
-            <div style={{ paddingTop: "30px" }}>{this.getButtons()}</div>
+            <div style={{ paddingTop: "30px" }}>
+              {getButtons(this.state.timerOn, this.state.timerTime, [
+                this.startTimer,
+                this.pauseTimer,
+                this.resetTimer,
+              ])}
+            </div>
 
             <div
               style={{
