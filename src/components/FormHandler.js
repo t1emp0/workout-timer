@@ -1,37 +1,57 @@
 import React, { useState, useCallback } from "react";
-import { TextField } from "@material-ui/core";
+import { TextField, Button, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
-import Stopwatch from "./Stopwatch";
 import inputToExerciseDict from "./InputParser";
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    // backgroundColor: "darkGrey",
+  },
+  workoutInput: {
+    width: "80%",
+    maxWidth: 500,
+    marginBottom: 10,
+  },
+  submitButton: {
+    backgroundColor: "#2e97ff",
+  },
+  submitText: {
+    color: "#000000",
+  },
+}));
+
 function FormHandler(props) {
+  const classes = useStyles();
+
   let [textBox, setTextBox] = useState(
-    '5" Squats + 2x(15"Plank + 15"Burpees) + 15" Flex'
+    // '5" Squats + 15" Plank'
+    '15" Squats + \n2x(15"Plank + 15"Burpees) + \n15" Flex'
   );
   let [showEditing, setShowEditing] = useState(true);
-  let [workout, setWorkout] = useState({ exercises: [] });
 
   const handleSubmit = useCallback(
+    // TODO: Add warning if workout already started.
     (event) => {
-      setWorkout(inputToExerciseDict(textBox));
+      let exerciceDict = inputToExerciseDict(textBox);
+      props.setWorkout(exerciceDict);
       setShowEditing(false);
 
       event.preventDefault();
     },
-    [textBox, setWorkout, setShowEditing]
+    [textBox, props, setShowEditing]
   );
 
   return (
-    <div>
+    <div className={classes.root}>
       {showEditing && (
         <form onSubmit={handleSubmit}>
           <div>
             <TextField
-              style={{
-                width: "80%",
-              }}
+              className={classes.workoutInput}
               type="text"
               name="exercises"
+              id="inputExercises"
               multiline
               value={textBox}
               onChange={(e) => {
@@ -39,19 +59,21 @@ function FormHandler(props) {
               }}
             />
           </div>
-          <input type="submit" value="Submit" />
+          <Button className={classes.submitButton} type="submit" value="Submit">
+            <Typography className={classes.submitText}>SUBMIT</Typography>
+          </Button>
         </form>
       )}
 
       {!showEditing && (
-        <button onClick={() => setShowEditing(true)}>Edit exercises</button>
+        <Button
+          className={classes.submitButton}
+          onClick={() => setShowEditing(true)}
+        >
+          Edit workout
+        </Button>
       )}
 
-      {workout.exercises.length > 0 && (
-        <div>
-          <Stopwatch workout={workout} notifyChange={props.notifyChange} />
-        </div>
-      )}
     </div>
   );
 }

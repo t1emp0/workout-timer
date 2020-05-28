@@ -17,12 +17,12 @@ const lightTheme = createMuiTheme({
     h1: {
       fontFamily: '"Montserrat", "Inter", sans-serif',
       fontWeight: 600,
-      fontSize: 30,
+      fontSize: 40,
     },
     h2: {
       fontFamily: '"Montserrat", "Inter", sans-serif',
       fontWeight: 600,
-      fontSize: 22,
+      fontSize: 30,
     },
     h3: {
       fontFamily: '"Montserrat", "Inter", sans-serif',
