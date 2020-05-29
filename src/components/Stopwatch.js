@@ -12,35 +12,49 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: "20px",
+    paddingTop: "3vh",
     paddingRight: "20px",
     paddingLeft: "20px",
-    // backgroundColor: "grey",
   },
   currentExerciseLabel: {
     margin: 0,
-    // textAlign: "left",
+    textAlign: "left",
   },
   currentExerciseText: {
     paddingBottom: "1vh",
     margin: 0,
   },
+  exerciseTimeContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  exerciseTimeText: {
+    fontWeight: "regular",
+    position: "absolute",
+    margin: 0,
+  },
   excerciseProgress: {
     color: "#2e97ff",
   },
+  excerciseProgressContainer: {
+    position: "absolute",
+  },
   totalProgress: { color: "#000080" },
   buttonRow: {
-    marginTop: "1vh",
+    marginTop: "2vh",
   },
-  extraInfo: {
+  extraInfoContainer: {
     display: "flex",
     justifyContent: "center",
-    marginTop: "1vh",
+    marginTop: "2vh",
   },
-  snackbar: {
-    display: "flex",
-    position: "absolute",
-    bottom: 70,
+  extraInfoText: {
+    margin: 0,
+    fontSize: "20px",
+  },
+  extraInfoSeparation: {
+    minWidth: "40px",
   },
 }));
 
@@ -83,10 +97,6 @@ function getButtons(timerOn, timerTime, timerFinished, controlFunctions) {
   const status = getTimerState(timerOn, timerTime, timerFinished);
   return <ControlButons status={status} controlFunctions={controlFunctions} />;
 }
-
-// function Alert(props) {
-//   return <MuiAlert elevation={6} variant="filled" {...props} />;
-// }
 
 function Stopwatch(props) {
   const classes = useStyles();
@@ -136,6 +146,7 @@ function Stopwatch(props) {
   };
 
   const workoutFinished = () => {
+    props.notifyChange();
     setTimerFinished(true);
     pauseTimer();
   };
@@ -157,16 +168,9 @@ function Stopwatch(props) {
     }
   };
 
-  // const [open, setOpen] = React.useState(false);
-
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
-
   const handleUpdateSignal = () => {
     pauseTimer();
     resetTimer();
-    // setOpen(true);
   };
 
   useEffect(() => {
@@ -184,20 +188,6 @@ function Stopwatch(props) {
 
   return (
     <div className={classes.root}>
-      {/* <div>
-        {timerTime === 0 && (
-          <Snackbar
-            open={open}
-            autoHideDuration={4000}
-            onClose={handleClose}
-            className={classes.snackbar}
-          >
-            <Alert onClose={handleClose} severity="success">
-              Ready to begin. Press start!
-            </Alert>
-          </Snackbar>
-        )}
-      </div> */}
       {!timerFinished && (
         <div>
           <div>
@@ -206,20 +196,11 @@ function Stopwatch(props) {
               {currentExercise.name}
             </Typography>
           </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Typography
-              variant="h1"
-              style={{ fontWeight: "regular", position: "absolute", margin: 0 }}
-            >
+          <div className={classes.exerciseTimeContainer}>
+            <Typography variant="h1" className={classes.exerciseTimeText}>
               {timeFormatter(exerciseLeft * 1000)}
             </Typography>
-            <div style={{ position: "absolute" }}>
+            <div className={classes.excerciseProgressContainer}>
               <CircularProgress
                 className={classes.excerciseProgress}
                 variant="static"
@@ -227,14 +208,14 @@ function Stopwatch(props) {
                   100 -
                   parseInt(exerciseMilis / (currentExercise.duration * 10))
                 }
-                size={240}
+                size={"36vh"}
                 thickness={6}
               />
             </div>
             <CircularProgress
               className={classes.totalProgress}
               variant="static"
-              size={280}
+              size={"42vh"}
               thickness={1}
               // Could make this value update with seconds. Better?
               // TODO: Check which way users like best.
@@ -250,19 +231,19 @@ function Stopwatch(props) {
             ])}
           </div>
 
-          <div className={classes.extraInfo}>
-            <div style={{ justifyContent: "center" }}>
+          <div className={classes.extraInfoContainer}>
+            <div>
               Time elapsed:
-              <h4 style={{ margin: 0, fontSize: "20px" }}>
+              <h4 className={classes.extraInfoText}>
                 {timeFormatter(timerTime)}
               </h4>
             </div>
 
-            <div style={{ minWidth: "40px" }} />
+            <div className={classes.extraInfoSeparation} />
 
-            <div style={{ justifyContent: "center" }}>
+            <div>
               Exercises left:
-              <h4 style={{ margin: 0, fontSize: "20px" }}>
+              <h4 className={classes.extraInfoText}>
                 {events.length + 1}/{props.workout.exercises.length}
               </h4>
             </div>
