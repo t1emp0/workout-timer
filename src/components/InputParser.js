@@ -21,7 +21,7 @@
  */
 export function inputToExerciseDict(input) {
   let replaced = makeTextReplacements(input);
-  console.log(replaced);
+  // console.log(replaced);
   let full = computeRepetition(replaced);
   let splitted = full.split(",");
 
@@ -46,7 +46,7 @@ export function inputToExerciseDict(input) {
     duration: totalSeconds,
   };
 
-  console.log(workout.duration);
+  // console.log(workout.duration);
 
   return workout;
 }

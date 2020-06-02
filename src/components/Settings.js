@@ -28,15 +28,16 @@ function Settings(props) {
     <div className={classes.root}>
       <Grid container spacing={2} justify={"center"} className={classes.grid}>
         <Grid item>
-          <Typography variant="h4">Volume</Typography>
+          <Typography variant="h3">Volume</Typography>
         </Grid>
-        <Grid item style={{ transform: "scaleX(-1)" }}>
+        <Grid item>
           <span>
             <Switch
-              checked={!volumeActive}
+              checked={volumeActive}
               onChange={(event) => {
-                setVolumeActive(!event.target.checked);
+                setVolumeActive(event.target.checked);
               }}
+              color="secondary"
             />
           </span>
         </Grid>
@@ -54,7 +55,8 @@ function Settings(props) {
             onChange={(event, newVolume) => {
               setVolume(newVolume * 0.01);
             }}
-            aria-labelledby="continuous-slider"
+            color="secondary"
+            aria-labelledby="volume-slider"
           />
         </Grid>
         <Grid item>

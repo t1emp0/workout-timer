@@ -1,9 +1,6 @@
-import "../App.css";
 import React, { useState, useEffect } from "react";
 import { Typography, CircularProgress } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-// import Snackbar from "@material-ui/core/Snackbar";
-// import MuiAlert from "@material-ui/lab/Alert";
 
 import ControlButons from "./ControlButtons";
 
@@ -34,13 +31,9 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     margin: 0,
   },
-  excerciseProgress: {
-    color: "#2e97ff",
-  },
   excerciseProgressContainer: {
     position: "absolute",
   },
-  totalProgress: { color: "#000080" },
   buttonRow: {
     marginTop: "2vh",
   },
@@ -215,6 +208,7 @@ function Stopwatch(props) {
             <CircularProgress
               className={classes.totalProgress}
               variant="static"
+              color="secondary"
               size={"42vh"}
               thickness={1}
               // Could make this value update with seconds. Better?

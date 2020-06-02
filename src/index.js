@@ -27,7 +27,7 @@ const lightTheme = createMuiTheme({
     h3: {
       fontFamily: '"Montserrat", "Inter", sans-serif',
       fontWeight: 600,
-      fontSize: 18,
+      fontSize: 24,
     },
     h6: {
       fontFamily: '"Montserrat", "Inter", sans-serif',
@@ -43,10 +43,10 @@ const lightTheme = createMuiTheme({
 
   palette: {
     primary: {
-      main: "#333333",
+      main: "#2E97FF",
     },
     secondary: {
-      main: "#727171",
+      main: "#000080",
     },
     accent: {
       main: "#80d6d1",

@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { withStyles } from "@material-ui/styles";
+import React, { useEffect, useRef } from "react";
+import { makeStyles } from "@material-ui/styles";
 import { IconButton } from "@material-ui/core";
 
 import CloseIcon from "@material-ui/icons/Close";
 
-const useStyles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   modal: {
     zIndex: "1",
     position: "fixed",
@@ -20,37 +20,56 @@ const useStyles = (theme) => ({
     position: "absolute",
     transform: "translate(-50%, -50%)",
     padding: 20,
-    paddingTop:10,
-    paddingBottom:30,
+    paddingTop: 10,
+    paddingBottom: 30,
     maxWidth: "80%",
+    borderRadius: "8px",
   },
   close: {
     textAlign: "right",
   },
-  inside: {
-  },
-});
+  inside: {},
+}));
 
-class PopUp extends Component {
-  handleClose = () => {
-    this.props.toggle();
+function PopUp(props) {
+  const classes = useStyles();
+  const node = useRef();
+
+  const handleClose = () => {
+    props.toggle();
   };
 
-  render() {
-    const { classes } = this.props;
-    return (
-      <div className={classes.modal}>
-        <div className={classes.modal_content}>
-          <div className={classes.close} onClick={this.handleClose}>
-            <IconButton>
-              <CloseIcon style={{ fontSize: 24 }} />
-            </IconButton>
-          </div>
-          <div className={classes.inside}>{this.props.inside}</div>
+  const handleClick = (e) => {
+    if (node.current.contains(e.target)) {
+      // inside click
+      console.log("click  inside");
+      return;
+    }
+    // outside click
+    handleClose();
+  };
+
+  useEffect(() => {
+    // add when mounted
+    document.addEventListener("mousedown", handleClick);
+    // return function to be called when unmounted
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
+  }, []);
+
+  return (
+    <div className={classes.modal}>
+      <div className={classes.modal_content} ref={node}>
+        <div className={classes.close}>
+          <IconButton onClick={handleClose}>
+            <CloseIcon style={{ fontSize: 24 }} />
+          </IconButton>
         </div>
+        <div className={classes.inside}>{props.inside}</div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
-export default withStyles(useStyles)(PopUp);
+export default PopUp;

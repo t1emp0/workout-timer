@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 280,
     minHeight: 600,
     margin: "auto",
+    paddingBottom: 20,
   },
   title: {
     paddingTop: "4vh",
