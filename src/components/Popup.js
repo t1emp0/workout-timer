@@ -42,7 +42,7 @@ function PopUp(props) {
   const handleClick = (e) => {
     if (node.current.contains(e.target)) {
       // inside click
-      console.log("click  inside");
+      // console.log("click  inside");
       return;
     }
     // outside click

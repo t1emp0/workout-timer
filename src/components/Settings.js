@@ -9,11 +9,12 @@ const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: "250px",
     paddingTop: "15px",
+    textAlign: "center",
   },
   grid: {
+    display: "flex",
     spacing: 2,
-    alignItems: "center",
-    justify: "center",
+    alignItems: "center", // vertically centered
     paddingBottom: "20px",
   },
 }));
@@ -21,7 +22,14 @@ const useStyles = makeStyles((theme) => ({
 function Settings(props) {
   const classes = useStyles();
 
-  let [volumeActive, setVolumeActive, volume, setVolume] = props.funcs;
+  let [
+    volumeEnabled,
+    setVolumeEnabled,
+    volume,
+    setVolume,
+    flashEnabled,
+    setFlashEnabled,
+  ] = props.funcs;
   let previousVolume = useState(parseInt(volume * 100))[0];
 
   return (
@@ -33,9 +41,9 @@ function Settings(props) {
         <Grid item>
           <span>
             <Switch
-              checked={volumeActive}
+              checked={volumeEnabled}
               onChange={(event) => {
-                setVolumeActive(event.target.checked);
+                setVolumeEnabled(event.target.checked);
               }}
               color="secondary"
             />
@@ -49,7 +57,7 @@ function Settings(props) {
         </Grid>
         <Grid item xs>
           <Slider
-            disabled={!volumeActive}
+            disabled={!volumeEnabled}
             defaultValue={previousVolume}
             volume={volume}
             onChange={(event, newVolume) => {
@@ -61,6 +69,23 @@ function Settings(props) {
         </Grid>
         <Grid item>
           <VolumeUp />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} justify={"center"} className={classes.grid}>
+        <Grid item>
+          <Typography variant="h3">Screen Flash</Typography>
+        </Grid>
+        <Grid item>
+          <span>
+            <Switch
+              checked={flashEnabled}
+              onChange={(event) => {
+                setFlashEnabled(event.target.checked);
+              }}
+              color="secondary"
+            />
+          </span>
         </Grid>
       </Grid>
     </div>
