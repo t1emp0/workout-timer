@@ -56,16 +56,6 @@ function getButtons(classes, status, startTimer, pauseTimer, resetTimer) {
           </IconButton>
         </div>
       );
-    case "Finished":
-      return (
-        <IconButton
-          className={classes.iconButton}
-          aria-label="reset"
-          onClick={resetTimer}
-        >
-          <ReplayIcon className={classes.controlIcon} />
-        </IconButton>
-      );
     // case "Not started"
     default:
       return (
@@ -81,10 +71,10 @@ function getButtons(classes, status, startTimer, pauseTimer, resetTimer) {
 }
 
 function ControlButons(props) {
-  const timerState = props.status;
-  const startTimer = props.controlFunctions[0];
-  const pauseTimer = props.controlFunctions[1];
-  const resetTimer = props.controlFunctions[2];
+  const timerState = props.timerState;
+  const startTimer = props.startTimer;
+  const pauseTimer = props.pauseTimer;
+  const resetTimer = props.resetTimer;
 
   const classes = useStyles();
 

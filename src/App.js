@@ -4,11 +4,12 @@ import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 
 import FormHandler from "./components/FormHandler";
-import Stopwatch from "./components/Stopwatch";
+import Stopwatch from "./components/StopwatchLogic";
 import HelpAndInfo from "./components/HelpAndInfo";
 import PopUp from "./components/Popup";
 import Settings from "./components/Settings";
 import notifyChange from "./components/ChangeNotifier";
+import EndScreen from "./components/EndScreen";
 
 const useStyles = makeStyles((theme) => ({
   app: {
@@ -33,33 +34,40 @@ function App() {
   let classes = useStyles();
 
   let [workout, setWorkout] = useState({ exercises: [] });
+  let [appState, setAppState] = useState("Home");
 
   let [settingsEnabled, setSettingsEnabled] = useState(false);
-  let [volumeEnabled, setVolumeActive] = useState(true);
+  let [volumeEnabled, setVolumeEnabled] = useState(true);
   let [volume, setVolume] = useState(1);
+  let [flashEnabled, setFlashEnabled] = useState(false);
 
   const fullNotifyUpdated = () => {
-    notifyChange(volume, volumeEnabled);
+    const targetDiv = document.querySelector("#App");
+    notifyChange(volume, volumeEnabled, flashEnabled, targetDiv);
   };
-
+  
   const togglePopUp = () => {
     setSettingsEnabled(!settingsEnabled);
   };
-
+  
   const titleClick = () => {
-    //TODO: Add alert
     setWorkout({ exercises: [] });
+    setAppState("Home");
   };
 
   return (
-    <div className={classes.app}>
+    <div id="App" className={classes.app}>
       <div className={classes.content}>
         {settingsEnabled && (
           <PopUp
             toggle={togglePopUp}
             inside={
               <Settings
-                funcs={[volumeEnabled, setVolumeActive, volume, setVolume]}
+                funcs={[
+                  volumeEnabled, setVolumeEnabled,
+                  volume, setVolume,
+                  flashEnabled, setFlashEnabled,
+                ]}
               />
             }
           />
@@ -72,15 +80,29 @@ function App() {
         </div>
 
         <FormHandler
-          workout={workout}
           setWorkout={setWorkout}
+          timerStarted={appState === "Timing"}
           openSettings={togglePopUp}
+          setAppState={setAppState}
         />
 
-        {workout.exercises.length === 0 && <HelpAndInfo />}
+        {appState === "Home" && <HelpAndInfo />}
 
-        {workout.exercises.length > 0 && (
-          <Stopwatch workout={workout} notifyChange={fullNotifyUpdated} />
+        {appState === "Timing" && (
+          <Stopwatch
+            workout={workout}
+            notifyChange={fullNotifyUpdated}
+            setAppState={setAppState}
+          />
+        )}
+
+        {appState === "Finished" && (
+          <EndScreen
+            resetTimer={() => {
+              setWorkout(workout);
+              setAppState("Timing");
+            }}
+          />
         )}
       </div>
     </div>

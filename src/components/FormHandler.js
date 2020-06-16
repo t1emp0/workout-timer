@@ -19,20 +19,29 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     margin: "auto",
+    paddingLeft: 12,
   },
   submitButton: {
     alignSelf: "center",
     position: "absolute",
     backgroundColor: "rgba(46,151,255,0.75)",
   },
+  submitText: {
+    color: "#000000",
+  },
+  cancelButton: {
+    alignSelf: "center",
+    backgroundColor: "rgba(150,203,255,1)",
+  },
+  cancelText: {
+    color: "#000000",
+    fontSize: 12,
+  },
   settingsButton: {
     marginLeft: "auto",
   },
   settingsIcon: {
     fontSize: 32,
-  },
-  submitText: {
-    color: "#000000",
   },
 }));
 
@@ -51,6 +60,7 @@ function FormHandler(props) {
       let exerciceDict = inputToExerciseDict(textBox);
       props.setWorkout(exerciceDict);
       toggleShowEditing();
+      props.setAppState("Timing");
 
       event.preventDefault();
     },
@@ -79,7 +89,16 @@ function FormHandler(props) {
         )}
 
         <div className={classes.buttonsRow}>
-          {showEditing ? (
+          {showEditing && props.timerStarted && (
+            <Button
+              className={classes.cancelButton}
+              onClick={() => toggleShowEditing()}
+            >
+              <Typography className={classes.cancelText}>Cancel</Typography>
+            </Button>
+          )}
+
+          {showEditing && (
             <Button
               className={classes.submitButton}
               type="submit"
@@ -87,7 +106,9 @@ function FormHandler(props) {
             >
               <Typography className={classes.submitText}>SUBMIT</Typography>
             </Button>
-          ) : (
+          )}
+
+          {!showEditing && (
             <Button
               className={classes.submitButton}
               onClick={() => toggleShowEditing()}
