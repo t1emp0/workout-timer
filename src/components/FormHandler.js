@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     margin: "auto",
-    paddingLeft: 12,
   },
   submitButton: {
     alignSelf: "center",
@@ -32,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
   cancelButton: {
     alignSelf: "center",
     backgroundColor: "rgba(150,203,255,1)",
+    paddingLeft: 12,
   },
   cancelText: {
     color: "#000000",
@@ -48,10 +48,8 @@ const useStyles = makeStyles((theme) => ({
 function FormHandler(props) {
   const classes = useStyles();
 
-  let [textBox, setTextBox] = useState(
-    // '5" Squats + 3x(5" Plank)'
-    '15" Squats + \n2x(15"Plank + 15"Burpees) + \n15" Lunges'
-  );
+  const [textBox, setTextBox] = [props.textBox, props.setTextBox]
+
   let [showEditing, setShowEditing] = useState(true);
 
   const handleSubmit = useCallback(

@@ -35,6 +35,9 @@ function App() {
 
   let [workout, setWorkout] = useState({ exercises: [] });
   let [appState, setAppState] = useState("Home");
+  let [textBox, setTextBox] = useState(
+    '15" Squats + \n2x(15" Plank + 15" Burpees) + \n15" Lunges'
+  );
 
   let [settingsEnabled, setSettingsEnabled] = useState(false);
   let [volumeEnabled, setVolumeEnabled] = useState(true);
@@ -84,9 +87,11 @@ function App() {
           timerStarted={appState === "Timing"}
           openSettings={togglePopUp}
           setAppState={setAppState}
+          textBox={textBox}
+          setTextBox={setTextBox}
         />
 
-        {appState === "Home" && <HelpAndInfo />}
+        {appState === "Home" && <HelpAndInfo setTextBox={setTextBox}/>}
 
         {appState === "Timing" && (
           <Stopwatch
