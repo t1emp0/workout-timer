@@ -65,8 +65,15 @@ const sampleWorkouts = [
   {
     title: "5 minute plank",
     workout:
-      '1\' High plank + 30" Elbow plank + \n30" Rise one foot + 30" Rise other foot + \
+      '1\' High plank + 30" Elbow plank + \n30" Raise one foot + 30" Raise other foot + \
       \n30" Side plank + 30" Other side + \n30" High plank + 1\' Elbow plank',
+  },
+  {
+    title: "1 hour turbo trainer",
+    workout:
+      "15' Free + \
+      \n2x[ 5x( 20\" Standing sprint + 40\" Easy recovery + 1' Very hard 90% + 1' Light) + 6' Easy ] + \
+      \n3' Regenerative",
   },
 ];
 
@@ -100,7 +107,7 @@ function HelpAndInfo(props) {
               </ul>
               <p style={{ marginBottom: 0 }}>
                 Feel free to write whatever you want! <br />
-                You have the instructions below.
+                In case you want all the details, you have the instructions below.
               </p>
             </div>
           </ExpansionPanelDetails>
@@ -150,10 +157,14 @@ function HelpAndInfo(props) {
                   enter the workout in the format explained above, it will tell
                   you which exercise you're at and much time is left. <br />
                   <br />
-                  If you're unsure how to do it, try the example above! <br />
+                  If you're unsure how to do it, try out the samples! <br />
                   <br />
                   App created with &#60;3 by{" "}
-                  <a href="https://github.com/t1emp0" target="_blank">
+                  <a
+                    href="https://github.com/t1emp0"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     t1emp0
                   </a>
                   .

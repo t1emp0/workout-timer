@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   cancelButton: {
     alignSelf: "center",
     backgroundColor: "rgba(150,203,255,1)",
-    paddingLeft: 12,
+    marginLeft: 12,
   },
   cancelText: {
     color: "#000000",

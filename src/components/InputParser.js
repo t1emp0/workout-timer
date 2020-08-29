@@ -46,7 +46,7 @@ export function inputToExerciseDict(input) {
     duration: totalSeconds,
   };
 
-  // console.log(workout.duration);
+  console.log("Workout duration: " + workout.duration / 60 + " min");
 
   return workout;
 }
