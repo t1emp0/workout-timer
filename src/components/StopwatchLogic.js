@@ -103,6 +103,15 @@ function Stopwatch(props) {
     changeExercise(totalSeconds);
   }
 
+  const skipExercise = () => {
+    const newDuration =
+      localWorkout.duration - (currentExercise.duration - exerciseSeconds);
+    setLocalWorkout({
+      duration: newDuration,
+      length: props.workout.exercises.length,
+    });
+    changeExercise(totalSeconds);
+  };
 
   return (
     <StopwatchUI
@@ -110,9 +119,9 @@ function Stopwatch(props) {
       currentExercise={currentExercise}
       lastStart={lastStart}
       workoutDuration={localWorkout.duration}
-      exercisesLeft={
-        (events.length + 1).toString() + "/" + localWorkout.length.toString()
-      }
+      exercisesLeft={` ${events.length + 1} / ${localWorkout.length}`}
+      skipExercise = {skipExercise}
+      skipEnabled = {props.skipEnabled}
       controlButtons={
         <ControlButons
           timerState={getTimerState(timerOn, timerTime)}

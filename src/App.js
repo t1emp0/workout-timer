@@ -43,16 +43,17 @@ function App() {
   let [volumeEnabled, setVolumeEnabled] = useState(true);
   let [volume, setVolume] = useState(1);
   let [flashEnabled, setFlashEnabled] = useState(false);
+  let [skipEnabled, setSkipEnabled] = useState(false);
 
   const fullNotifyUpdated = () => {
     const targetDiv = document.querySelector("#App");
     notifyChange(volume, volumeEnabled, flashEnabled, targetDiv);
   };
-  
+
   const togglePopUp = () => {
     setSettingsEnabled(!settingsEnabled);
   };
-  
+
   const titleClick = () => {
     setWorkout({ exercises: [] });
     setAppState("Home");
@@ -70,6 +71,7 @@ function App() {
                   volumeEnabled, setVolumeEnabled,
                   volume, setVolume,
                   flashEnabled, setFlashEnabled,
+                  skipEnabled, setSkipEnabled,
                 ]}
               />
             }
@@ -91,13 +93,14 @@ function App() {
           setTextBox={setTextBox}
         />
 
-        {appState === "Home" && <HelpAndInfo setTextBox={setTextBox}/>}
+        {appState === "Home" && <HelpAndInfo setTextBox={setTextBox} />}
 
         {appState === "Timing" && (
           <Stopwatch
             workout={workout}
             notifyChange={fullNotifyUpdated}
             setAppState={setAppState}
+            skipEnabled={skipEnabled}
           />
         )}
 

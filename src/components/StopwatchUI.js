@@ -1,6 +1,7 @@
 import React from "react";
-import { Typography, CircularProgress } from "@material-ui/core";
+import { Typography, CircularProgress, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import SkipNextIcon from "@material-ui/icons/SkipNext";
 
 /**
  * Formats the given time to a string (HH :) MM : SS
@@ -43,14 +44,20 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    position: "relative",
   },
   exerciseTimeText: {
     fontWeight: "regular",
     position: "absolute",
     margin: 0,
   },
-  excerciseProgressContainer: {
+  exerciseProgress: {
     position: "absolute",
+  },
+  skipExercise: {
+    position: "absolute",
+    alignSelf: "end",
+    right: 0,
   },
   controlButtons: {
     marginTop: "2vh",
@@ -69,6 +76,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 function StopwatchUI(props) {
   const classes = useStyles();
 
@@ -80,6 +88,10 @@ function StopwatchUI(props) {
   let exerciseSeconds = Math.floor(exerciseMilis / 1000);
   let exerciseLeft = currentExercise.duration - exerciseSeconds;
 
+  let exerciseProgress =
+    100 - parseInt(exerciseMilis / (currentExercise.duration * 10));
+  let totalProgress = parseInt(timerTime / props.workoutDuration / 10);
+
   return (
     <div className={classes.root}>
       <div>
@@ -89,29 +101,38 @@ function StopwatchUI(props) {
             {currentExercise.name}
           </Typography>
         </div>
+
         <div className={classes.exerciseTimeContainer}>
           <Typography variant="h1" className={classes.exerciseTimeText}>
             {timeFormatter(exerciseLeft * 1000)}
           </Typography>
-          <div className={classes.excerciseProgressContainer}>
-            <CircularProgress
-              className={classes.excerciseProgress}
-              variant="static"
-              value={
-                100 - parseInt(exerciseMilis / (currentExercise.duration * 10))
-              }
-              size={"36vh"}
-              thickness={6}
-            />
-          </div>
+          
+          <CircularProgress
+            className={classes.exerciseProgress}
+            variant="static"
+            value={exerciseProgress}
+            size={"36vh"}
+            thickness={6}
+          />
+
           <CircularProgress
             className={classes.totalProgress}
             variant="static"
             color="secondary"
             size={"42vh"}
             thickness={1}
-            value={parseInt(timerTime / props.workoutDuration / 10)}
+            value={totalProgress}
           />
+
+          {props.skipEnabled && (
+            <IconButton
+              className={classes.skipExercise}
+              aria-label="skip"
+              onClick={() => props.skipExercise()}
+            >
+              <SkipNextIcon />
+            </IconButton>
+          )}
         </div>
 
         <div className={classes.controlButtons}>{props.controlButtons}</div>

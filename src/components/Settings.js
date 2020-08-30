@@ -23,12 +23,10 @@ function Settings(props) {
   const classes = useStyles();
 
   let [
-    volumeEnabled,
-    setVolumeEnabled,
-    volume,
-    setVolume,
-    flashEnabled,
-    setFlashEnabled,
+    volumeEnabled, setVolumeEnabled,
+    volume, setVolume,
+    flashEnabled,setFlashEnabled,
+    skipEnabled, setSkipEnabled,
   ] = props.funcs;
   let previousVolume = useState(parseInt(volume * 100))[0];
 
@@ -82,6 +80,23 @@ function Settings(props) {
               checked={flashEnabled}
               onChange={(event) => {
                 setFlashEnabled(event.target.checked);
+              }}
+              color="secondary"
+            />
+          </span>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} justify={"center"} className={classes.grid}>
+        <Grid item>
+          <Typography variant="h3">Skip Exercise</Typography>
+        </Grid>
+        <Grid item>
+          <span>
+            <Switch
+              checked={skipEnabled}
+              onChange={(event) => {
+                setSkipEnabled(event.target.checked);
               }}
               color="secondary"
             />
