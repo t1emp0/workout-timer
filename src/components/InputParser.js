@@ -126,7 +126,7 @@ function computeRepetition(input) {
 
     let repeated = repeatBlock(block, times);
 
-    input = input.slice(0, first) + repeated + input.slice(last + 1);
+    input = input.slice(0, first) + repeated + input.slice(last+1).trim().slice(3);
     multIndex = input.indexOf("*");
   }
   return input;
@@ -144,6 +144,7 @@ function getNumReps(input, multIndex) {
   }
   if (repetitions.length === 0) {
     // EXCEPTION
+    console.log("Repetition length = 0!");
     return "";
   }
   let numReps = repetitions.join("").trim();
@@ -190,8 +191,7 @@ function getBlock(input, m) {
 function repeatBlock(block, numTimes) {
   let repeatedBlock = "";
   for (let i = numTimes; i > 0; i--) {
-    let added = i !== 1 ? ", " : "";
-    repeatedBlock += block + added;
+    repeatedBlock += block + ", ";
   }
   return repeatedBlock;
 }
