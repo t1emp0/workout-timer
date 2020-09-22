@@ -14,6 +14,14 @@
  *      (And then show some sort of indication)
  */
 
+const possibleErrors = [
+  "Parentheses mismatch.",
+  "Exercise can't have empty name.",
+  "Exercise time must be positive.",
+  "Exercise names can't contain numbers.",
+];
+export { possibleErrors };
+
 /**
  * @desc Transforms the long string into an array of exercises
  * @param {string} input A correctly formatted workout session (see documentation)
@@ -21,7 +29,11 @@
  */
 export function inputToExerciseDict(input) {
   let replaced = makeTextReplacements(input);
-  // console.log(replaced);
+
+  let openPar = replaced.split(")").length - 1;
+  let closePar = replaced.split("(").length - 1;
+  if (openPar !== closePar) throw new Error(possibleErrors[0]);
+
   let full = computeRepetition(replaced);
   let splitted = full.split(",");
 
@@ -31,7 +43,13 @@ export function inputToExerciseDict(input) {
   splitted.forEach((ex) => {
     let exInSeconds = convertToSeconds(ex);
     let [exDuration, exName] = exInSeconds.split('"');
+
     totalSeconds += parseInt(exDuration.trim());
+
+    if (exName.trim() === "") throw new Error(possibleErrors[1]);
+    if (hasNumber(exName)) throw new Error(possibleErrors[3]);
+    if (isNaN(exDuration) || isNaN(totalSeconds))
+      throw new Error(possibleErrors[2]);
 
     let exercise = {
       duration: exDuration.trim(),
@@ -84,6 +102,10 @@ function replaceXs(input) {
     }
   }
   return input;
+}
+
+function hasNumber(myString) {
+  return /\d/.test(myString);
 }
 
 function isLetter(char) {

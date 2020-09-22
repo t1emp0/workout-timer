@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { TextField, Button, Typography, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
-import inputToExerciseDict from "./InputParser";
+import inputToExerciseDict, { possibleErrors } from "./InputParser";
 
 import SettingsIcon from "@material-ui/icons/Settings";
 
@@ -48,21 +48,43 @@ const useStyles = makeStyles((theme) => ({
 function FormHandler(props) {
   const classes = useStyles();
 
-  const [textBox, setTextBox] = [props.textBox, props.setTextBox]
+  const [textBox, setTextBox] = [props.textBox, props.setTextBox];
 
   let [showEditing, setShowEditing] = useState(true);
+  let [errorMessage, setErrorMessage] = useState("");
+  const defaultErrorMessage = "Wrong format.";
 
   const handleSubmit = useCallback(
-    // TODO: Add warning if workout already started.
     (event) => {
-      let exerciceDict = inputToExerciseDict(textBox);
-      props.setWorkout(exerciceDict);
-      toggleShowEditing();
-      props.setAppState("Timing");
+      let exerciceDict = "";
+      let currentErrorMessage = "";
+
+      try {
+        exerciceDict = inputToExerciseDict(textBox);
+      } catch (e) {
+        console.log(e);
+        if (possibleErrors.includes(e.message)) {
+          currentErrorMessage = e.message;
+        }
+        if (currentErrorMessage === "") {
+          currentErrorMessage = defaultErrorMessage;
+        }
+        setErrorMessage(
+          currentErrorMessage + " Please, check the input and try again."
+        );
+      }
+
+      if (exerciceDict !== "") {
+        setErrorMessage("");
+        setErrorMessage("");
+        props.setWorkout(exerciceDict);
+        toggleShowEditing();
+        props.setAppState("Timing");
+      }
 
       event.preventDefault();
     },
-    [textBox, props, setShowEditing]
+    [textBox, props, setShowEditing, errorMessage]
   );
 
   const toggleShowEditing = () => {
@@ -83,6 +105,8 @@ function FormHandler(props) {
             onChange={(e) => {
               setTextBox(e.target.value);
             }}
+            error={errorMessage !== ""}
+            helperText={errorMessage}
           />
         )}
 
