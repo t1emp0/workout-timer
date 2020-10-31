@@ -18,7 +18,6 @@ const possibleErrors = [
   "Parentheses mismatch.",
   "Exercise can't have empty name.",
   "Exercise time must be positive.",
-  "Exercise names can't contain numbers.",
 ];
 export { possibleErrors };
 
@@ -47,7 +46,6 @@ export function inputToExerciseDict(input) {
     totalSeconds += parseInt(exDuration.trim());
 
     if (exName.trim() === "") throw new Error(possibleErrors[1]);
-    if (hasNumber(exName)) throw new Error(possibleErrors[3]);
     if (isNaN(exDuration) || isNaN(totalSeconds))
       throw new Error(possibleErrors[2]);
 
@@ -126,7 +124,7 @@ function computeRepetition(input) {
 
     let repeated = repeatBlock(block, times);
 
-    input = input.slice(0, first) + repeated + input.slice(last+1).trim().slice(3);
+    input = input.slice(0, first) + repeated + input.slice(last).trim().slice(3);
     multIndex = input.indexOf("*");
   }
   return input;
