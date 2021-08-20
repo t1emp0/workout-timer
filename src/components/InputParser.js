@@ -14,6 +14,9 @@
  *      (And then show some sort of indication)
  */
 
+/**
+ * List of possible specific errors when parsing
+ */
 const possibleErrors = [
   "Parentheses mismatch.",
   "Exercise can't have empty name.",
@@ -45,9 +48,17 @@ export function inputToExerciseDict(input) {
 
     totalSeconds += parseInt(exDuration.trim());
 
-    if (exName.trim() === "") throw new Error(possibleErrors[1]);
-    if (isNaN(exDuration) || isNaN(totalSeconds))
+    if (exName.trim() === "") {
+      throw new Error(possibleErrors[1]);
+    }
+    if (isNaN(exDuration) || isNaN(totalSeconds)) {
+      console.log(exDuration.trim());
+      let errorPos = input.search(exDuration.trim());
+      console.log(exDuration, errorPos, exDuration.length);
+      console.log(input);
+      console.log(input.slice(errorPos, exDuration.trim().length));
       throw new Error(possibleErrors[2]);
+    }
 
     let exercise = {
       duration: exDuration.trim(),
@@ -124,7 +135,8 @@ function computeRepetition(input) {
 
     let repeated = repeatBlock(block, times);
 
-    input = input.slice(0, first) + repeated + input.slice(last).trim().slice(3);
+    input =
+      input.slice(0, first) + repeated + input.slice(last).trim().slice(3);
     multIndex = input.indexOf("*");
   }
   return input;

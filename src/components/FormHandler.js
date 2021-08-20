@@ -101,6 +101,7 @@ function FormHandler(props) {
             name="exercises"
             id="inputExercises"
             multiline
+            spellCheck="false"
             value={textBox}
             onChange={(e) => {
               setTextBox(e.target.value);
